@@ -19,7 +19,7 @@
         <base>DESC_NUM_FAX</base>
         <trans><![CDATA[
 	   <h2>Configurazione generale</h2>
-           Il numero di telefono del fax è composto da tre parti: prefisso internazionale, prefisso locale e numero vero e proprio.<br/>
+           Il numero di telefono del fax Ã¨ composto da tre parti: prefisso internazionale, prefisso locale e numero vero e proprio.<br/>
            Il server fax utilizza i dati relativi al numero per comporre il corretto prefisso in base al destinatario.
         ]]></trans>	
     </entry>
@@ -130,12 +130,12 @@
 
     <entry>
       <base>MODE</base>
-      <trans>Modalità </trans>
+      <trans>ModalitÃ Â </trans>
     </entry>
 
     <entry>
       <base>DESC_MODE</base>
-      <trans>E' possibile utilizzare il modem per ricevere e inviare fax selezionado la modalità   "Invio e ricezione". Selezionando "Solo ricezione" il modem risponderà  alle chiamate in arrivo e riceverà  i fax, ma non potrà  essere utilizzato per inviare fax. In modalità  "Solo Invio", il modem non risponderà  alle chiamate, ma permetterà  l'invio di fax attraverso la linea telefonica.</trans>
+      <trans>E' possibile utilizzare il modem per ricevere e inviare fax selezionado la modalitÃ    "Invio e ricezione". Selezionando "Solo ricezione" il modem risponderÃ Â  alle chiamate in arrivo e riceverÃ Â  i fax, ma non potrÃ Â  essere utilizzato per inviare fax. In modalitÃ Â  "Solo Invio", il modem non risponderÃ Â  alle chiamate, ma permetterÃ Â  l'invio di fax attraverso la linea telefonica.</trans>
     </entry>
 
     <entry>
@@ -147,7 +147,7 @@
       <trans><![CDATA[
             <p>
              Alcuni modem non sono in grado di riconoscere il tono di linea libera (in particolare se collegati a centralini) e non compongono il numero segnalando l'assenza di tono (errore "No Dial Tone"). <br/>
-E' possibile configurare il modem per ignorare l'assenza di linea e comporre immediatamente il numero. L'impostazione raccomandata è "Abilitato", si consiglia di disattivare l'attesa solo in caso di problemi.
+E' possibile configurare il modem per ignorare l'assenza di linea e comporre immediatamente il numero. L'impostazione raccomandata Ã¨ "Abilitato", si consiglia di disattivare l'attesa solo in caso di problemi.
             </p>
             ]]> 
       </trans>
@@ -160,7 +160,7 @@ E' possibile configurare il modem per ignorare l'assenza di linea e comporre imm
 		<hr class="sectionbar" /><h2>Formati e notifiche</h2>
             <p>
 		Il server fax, come operazione predefinita, inoltra i fax ricevuti sotto forma di e-mail con allegato. Specificare l'indirizzo e-mail a cui si desidera inoltrare i fax, altrimenti scegliere "Disabilitato" per disabilitare l'inoltro.<br/>
- Selezionare uno o più formati per l'allegato. Se non si desidera ricevere il fax in allegato, ma solo una notifica di ricezione, deselezionare tutti i formati.
+ Selezionare uno o piÃ¹ formati per l'allegato. Se non si desidera ricevere il fax in allegato, ma solo una notifica di ricezione, deselezionare tutti i formati.
             </p>
             ]]> 
       </trans>
@@ -194,7 +194,7 @@ E' possibile configurare il modem per ignorare l'assenza di linea e comporre imm
       <base>DESC_SAMBAFAX</base>
       <trans><![CDATA[
             <p>
-Il server fax può mettere a disposizione della rete locale una stampante virtuale, denominata "sambafax" che dovrà  essere configurata sui client, selezionando il driver Apple LaserWriter 16/600 PS. I documenti stampati sulla stampante di rete sambafax dovranno contenere esattamente la dicitura "Numero Fax:" seguita dal numero di fax del destinatario.
+Il server fax puÃ² mettere a disposizione della rete locale una stampante virtuale, denominata "sambafax" che dovrÃ Â  essere configurata sui client, selezionando il driver Apple LaserWriter 16/600 PS. I documenti stampati sulla stampante di rete sambafax dovranno contenere esattamente la dicitura "Numero Fax:" seguita dal numero di fax del destinatario.
             </p>
             ]]> 
       </trans>
@@ -267,8 +267,8 @@ Selezionare "Disabilitato" per disabilitare la stampa automatica dei fax.</trans
       <base>DESC_PBX_PREFIX</base>
       <trans><![CDATA[
             <p>
-		Se il modem fax è collegato ad un centralino, potrebbe essere necessario inserire un prefisso per "prendere la linea esterna".<br/>
- 		Se il modem è direttamente collegato ad una linea, oppure il centralino non richiede prefisso, lasciare il campo vuoto.<br/>
+		Se il modem fax Ã¨ collegato ad un centralino, potrebbe essere necessario inserire un prefisso per "prendere la linea esterna".<br/>
+ 		Se il modem Ã¨ direttamente collegato ad una linea, oppure il centralino non richiede prefisso, lasciare il campo vuoto.<br/>
             Se per chiamare si utilizza un centralino, inserire il prefisso da comporre
             </p>
             ]]> 

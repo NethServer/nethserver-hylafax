@@ -1,0 +1,10 @@
+{
+my $driver = $hylafax{'PrinterDriver'} || '';
+my $name = $hylafax{'PrinterName'} || '';
+if ($driver ne '' && $name ne'')
+{
+        $OUT.="#Stampa fax\n";
+        $OUT.="tiff2ps -a -w 8.20 -h 11.54 -H 11.90 \$FILE | gs -q -sDEVICE=$driver -dNOPAUSE -dSAFER=true -sPAPERSIZE=a4 -dFIXEDMEDIA -sOutputFile=- - | lpr -P $name";
+}
+
+}

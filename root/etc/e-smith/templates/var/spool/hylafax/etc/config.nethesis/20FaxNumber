@@ -1,0 +1,12 @@
+{
+    use esmith::config;
+    use esmith::db;
+
+    my %conf;
+    tie %conf, 'esmith::config';
+
+    my $FaxNumber;
+    {
+    	   $OUT .= "FAXNumber:              " . db_get_prop(\%conf, 'hylafax', 'FaxNumber');
+    }
+}

@@ -1,0 +1,97 @@
+#!/usr/bin/perl -w
+
+#----------------------------------------------------------------------
+# copyright (C) 2002 Mitel Networks Corp.
+#		
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#		
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# GNU General Public License for more details.
+#		
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+# 
+# Technical support for this program is available from Mitel Networks.
+# For details, please visit our web site at www.e-smith.com or
+# call us on 1 888 ESMITH 1 (US/Canada toll free) or +1 613 564 8000
+#----------------------------------------------------------------------
+
+package esmith;
+
+use strict;
+use Errno;
+use esmith::templates;
+use esmith::util;
+use esmith::AccountsDB;
+
+# init sme databases
+system("/etc/e-smith/events/actions/initialize-default-databases");
+
+my $a = esmith::AccountsDB->open || die "Couldn't open accounts db\n";
+
+#--------------------------------
+# Creo gruppo faxmanager
+#--------------------------------
+
+my $groupName = 'faxmanager';
+my $members   = 'admin';
+my $desc   = 'Gruppo per Gestione Fax';
+
+my %props = (
+    'type', 'group', 'Description',
+    $desc, 'Members', $members
+);
+
+my $group = $a->get($groupName) || 'false';
+
+if ($group eq 'false') {
+	$a->new_record( $groupName, \%props );
+
+	my $msg =
+    	  system( "/sbin/e-smith/signal-event", "group-create", "$groupName" )
+            ? 'CREATE_ERROR'
+            : 'CREATED_GROUP';
+}
+
+my %fprops = (
+    'type', 'pseudonym', 'Account', 'admin'
+);
+
+my $fmaster = $a->get('faxmaster') || 'false';
+if ($fmaster eq 'false') {
+	$a->new_record( 'faxmaster', \%fprops );
+	my $msg =
+    	  system( "/sbin/e-smith/signal-event", "pseudonym-create" )
+            ? 'CREATE_ERROR'
+            : 'CREATED_GROUP';
+}
+
+# expand config templates
+system("/sbin/e-smith/expand-template /etc/inittab");
+system("/sbin/e-smith/expand-template /var/spool/hylafax/etc/hosts.hfaxd");
+system("/sbin/e-smith/expand-template /etc/cron.daily/hylafax");
+system("/sbin/e-smith/expand-template /etc/pam.d/hylafax");
+system("/sbin/e-smith/expand-template /var/spool/hylafax/etc/config");
+system("/sbin/e-smith/expand-template /var/spool/hylafax/etc/FaxAccounting");
+system("/sbin/e-smith/expand-template /var/spool/hylafax/etc/FaxDispatch");
+system("/sbin/e-smith/expand-template /var/spool/hylafax/etc/FaxNotify");
+system("/sbin/e-smith/expand-template /var/qmail/control/badrcptto");
+system("/sbin/e-smith/expand-template /var/qmail/alias/.qmail-sendfax");
+
+# regenerate server-manager menu
+system("/etc/e-smith/events/actions/navigation-conf");
+
+# creo il database
+system("/etc/e-smith/events/actions/conf-hylafax-initdb");
+
+# configurazione di base del server
+system("/usr/sbin/neth-faxsetup &> /var/log/faxsetup.log");
+
+exit (0);
+

@@ -1,0 +1,78 @@
+#!/bin/bash
+fileType=$filetype_1
+file=$files_1
+inFile=`mktemp`
+tmpFile=`mktemp`
+txtFile=`mktemp`
+
+ENSCRIPT_PARAMS="-l -L 69 -s 1 -M A4 -e "
+if [ $# -eq 1 ]; then
+  outFile=$1
+else
+  outFile="tmp/report"
+fi
+
+#Convert source to pdf file
+case $fileType in
+
+"PostScript"|"PDF")
+	gs -q -sDEVICE=tiffg3 -dNOPAUSE -dSAFER=true -sPAPERSIZE=a4 -dFIXEDMEDIA -dBATCH -r209.10\x98 "-sOutputFile=$inFile" $file
+	;;
+
+"TIFF")
+	cp $file $inFile
+	;;
+ 
+*) 
+	echo "Error: unkown input file type $fileType." 
+	exit 1;
+	;;
+esac
+
+tiff2pdf -o $tmpFile $inFile 
+# pick first page
+ps2pdf -dFirstPage\#1 -dLastPage\#1 $tmpFile $inFile 
+
+#Convert pdf file to eps
+pdf2ps $inFile $tmpFile
+ps2epsi $tmpFile $inFile
+
+date=`date +%d/%m/%y`
+time=`date +%H:%M:%S`
+
+if [ "$WHY" = "done" ]; then
+  result="OK"
+else
+  result="ERRORE - $status"
+fi
+
+if [ -n "$csi" ]; then
+  csi="($csi)"
+fi
+
+#Save info
+cat << EOF > $txtFile
+=======================  Rapporto di invio fax ($date) ======================= 
+
+ Id Fax: $jobid
+ Data/Ora: $date $time
+ Destinazione: $number $csi
+ Numero pagine: $totpages
+ Tempo impiegato: $JTIME
+ Esito: $result
+
+=================================================================================
+EOF
+
+
+#Write info to file and rescale fax
+echo -e "\001epsf[s0.70 x2.0ca y6.0ca nx ny]{$inFile}" > $tmpFile
+cat $txtFile >> $tmpFile
+ENSCRIPT_PARAMS="${ENSCRIPT_PARAMS} -f Courier@10 -p $outFile.ps"
+
+#Create finale file
+/usr/bin/enscript ${ENSCRIPT_PARAMS} "$tmpFile" &> /dev/null 
+
+/bin/rm -f $inFile $tmpFile $txtFile
+
+ps2pdf "$outFile.ps" "$outFile.pdf"

@@ -1,0 +1,219 @@
+#!/bin/bash
+data="$1"; shift
+ENTRYTYPE="$1"; shift
+commid="$1"; shift
+DEVICE="$1"; shift
+jobid="$1"; shift
+JOBTAG="$1"; shift
+USERID="$1"; shift
+number="$1"; shift
+TSI="$1"; shift
+PARAMS="$1"; shift
+totpages="$1"; shift
+JTIME="$1"; shift
+CONNTIME="$1"; shift
+faxstatus="$1"; shift
+CIDNAME="$1"; shift
+CIDNUMBER="$1"; shift
+CALLID="$1"; shift
+owner="$1"; shift
+DCS="$1"; shift
+JOBINFO="$1"; shift
+
+faxuser="faxuser"
+faxpass="faxpass"
+faxdb="faxdb"
+totdials=`echo $JOBINFO | cut -d'/' -f4`
+DOCHOME=/home/e-smith/faxweb/docs
+
+if [ "$faxstatus" != "" ] || [ "$ENTRYTYPE" == "UNSENT" ]; then
+	state=8;
+else
+	state=7;
+fi
+
+if [ $JTIME == '' ]; then
+    JTIME=0
+fi
+
+
+function dbquery ()
+{
+	ret=$(mysql -s -u $faxuser -p$faxpass -nB -D $faxdb -e "$1")
+}
+
+function findName ()
+{
+    dbquery "Select nome from faxweb_association WHERE fax like '$1%' limit 1;"
+    nome_sender_ass=$ret
+    if [ -e "/home/httpd/html/horde/kronolith" ] ; then
+        nome_sender_hor=$(mysql -s -u hordepub -phpass -nB -D horde -e "Select object_name from turba_objects_pub WHERE object_fax like '$1%' limit 1;")
+    fi
+    if [ -e "/var/www/html/vtiger" ] ; then
+        nome_sender_vti=$(mysql -s -u vtigerpub -pvtpass -nB -D vtigerdb -e "Select accountname from vtiger_account WHERE fax like '$1%' limit 1;")
+    fi
+    if [ -e "/usr/share/phonebooks" ] ; then
+        nome_sender_cust=$(mysql -s -u pbookuser -ppbookpass -nB -D ext_phonebook -e "Select concat(azienda,' ',nome) as nome from rubrica WHERE fax like '$1%' limit 1;")
+    fi
+
+    NOME=''
+    [ "$nome_sender_hor" != "" ] && NOME=$nome_sender_hor
+    [ "$nome_sender_vti" != "" ] && NOME=$nome_sender_vti
+    [ "$nome_sender_cust" != "" ] && NOME=$nome_sender_cust
+    [ "$nome_sender_ass" != "" ] && NOME=$nome_sender_ass
+    NOME="`echo "$NOME" | sed 's/\W/ /g' `"
+}
+
+
+case $ENTRYTYPE in
+"SEND"|"UNSENT")
+	doc_id=$[$jobid + 1000000]
+	FAX_RPATH='/sent'
+	pathsent=$FAX_RPATH
+	fax_type='I'
+	# verifico se nel db esiste gia' => inviato da faxweb o secondo tentativo
+	dbquery "Select count(*) from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
+	result=$ret
+
+	# verifico se m_id e' valorizzato => invio multiplo
+	dbquery "Select rpath from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
+	rpath=$ret
+
+	if [ "$rpath" != "" ]; then 
+		# se e' un invio multiplo il file va su sentm/m_id, altrimenti sendpatch=send
+		pathsent="$rpath"
+	fi
+
+	#formattazione data da 09/25/08 17:31  a 08:09:25 17:31:37
+	year=`echo $data | cut -d' ' -f1  | cut -d'/' -f3`
+	day=`echo $data | cut -d' ' -f1  | cut -d'/' -f2`
+	month=`echo $data |  cut -d' ' -f1  |cut -d'/' -f1`
+	time=`echo $data |  cut -d' ' -f2`
+	data="$year:$month:$day $time:00"
+
+
+	# Campi inutilizzati tts, ktime, rtime
+	if [ $result -eq '0' ]; then
+		findName $number
+		execquery="Insert into faxweb_fax set number='$number', name='$NOME', device='$DEVICE', filename='$doc_id.tif', state='$state', doc_id=$doc_id, date='$data',  job_id='$jobid', com_id='$commid', user='$owner', pages='$totpages', attempts='$totdials', esito='$faxstatus', tipo='H', duration='$JTIME', fax_type='$fax_type', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='image/tiff', status='found'  ;"
+	elif [ $result -eq '1' ]; then
+		#Inviato da web
+		execquery="Update faxweb_fax set state='$state', date='$data', tts='$NEXT', ktime='$killtime', filename='$doc_id.tif', rtime='$retrytime', com_id='$commid', attempts='$totdials', pages='$totpages', esito='$faxstatus', duration='$JTIME',status='found' WHERE job_id=$jobid;"
+	else
+	    error=$result
+	fi
+
+
+
+
+
+;;
+
+"RECV")
+	FAX_RPATH='/received'
+	fax_type='R'
+	FILENAME=`echo $jobid | cut -d'/' -f2`
+	FILENAME=`echo $FILENAME | cut -d'.' -f1`
+	FILE=/var/spool/hylafax/recvq/$FILENAME.tif
+	INFO=/usr/sbin/faxinfo
+	ERRORSTO=/dev/null
+	SED=/bin/sed
+	AWK=/bin/awk
+	
+	PAGES="`$INFO $FILE | $AWK -F: '/Pages/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	QUALITY="`$INFO $FILE | $AWK -F: '/Quality/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	PAGE="`$INFO $FILE | $AWK -F: '/Page:/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	RECEIVED="`$INFO $FILE | $AWK -F'd:'  '/Received/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	DURATION="`$INFO $FILE | $AWK -F'v:'  '/TimeToRecv/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	RATE="`$INFO $FILE | $AWK -F: '/SignalRate/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	DATA="`$INFO $FILE | $AWK -F: '/DataFormat/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	ERRCORR="`$INFO $FILE | $AWK -F: '/ErrCorrect/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	SENDER="`$INFO $FILE | $AWK -F: '/Sender/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
+	SENDER="`echo "$SENDER" | sed 's/ //g' `"
+
+	[ "$CIDNUMBER" == "" ] && CIDNUMBER="$SENDER"
+
+	findName $CIDNUMBER
+
+	execquery="Insert into faxweb_fax set number='$CIDNUMBER', name='$NOME', device='$DEVICE', filename='$FILENAME.tif', data='$DATA', sendto='', msg='', date='$RECEIVED', pages='$PAGES', com_id='$commid', duration='$DURATION', quality='$QUALITY', forward_rcp='', rate='$RATE', errcorr='$ERRCORR', page='$PAGE', fax_type='R', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='image/tiff', status='found', esito=' ' ;"
+
+
+	if [ -f $FILE ]; then
+		cp $FILE $DOCHOME/received/; chmod 777 $DOCHOME/received/$FILENAME.tif
+    		if [ ! -e $DOCHOME/thumb/$FILENAME-15.png ]; then
+        		tifftopnm $FILE >$DOCHOME/tmp/$FILENAME.pnm
+        		pamcut -pad -bottom 600 -left 40 -right 1600 -top 0 $DOCHOME/tmp/$FILENAME.pnm > $DOCHOME/tmp/$FILENAME.cut.pnm
+        		#pnmcut -bottom 600 -left 40 -right 1600 -top 0 $DOCHOME/tmp/$FILENAME.pnm > $DOCHOME/tmp/$FILENAME.cut.pnm
+        		pnmscale 0.5 $DOCHOME/tmp/$FILENAME.cut.pnm > $DOCHOME/tmp/$FILENAME.cut50.pnm
+        		#scrivo il thumbnail ottenuto nella directory thumb
+        		pnmtopng $DOCHOME/tmp/$FILENAME.cut50.pnm >$DOCHOME/thumb/$FILENAME-15.png; chmod 644 $DOCHOME/thumb/$FILENAME-15.png
+        		
+			#cancello i file intermedi
+        		rm -rf $DOCHOME/tmp/$FILENAME*
+    		fi
+	fi
+
+
+;;
+
+"SUBMIT")
+	doc_id=$[$jobid + 1000000]
+	FAX_RPATH='/sent'
+	pathsent=$FAX_RPATH
+	fax_type='I'
+	# verifico se nel db esiste gia' => inviato da faxweb o secondo tentativo
+	dbquery "Select count(*) from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
+	result=$ret
+
+	# verifico se m_id e' valorizzato => invio multiplo
+	dbquery "Select rpath from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
+	rpath=$ret
+
+	if [ "$rpath" != "" ]; then 
+		# se e' un invio multiplo il file va su sentm/m_id, altrimenti sendpatch=send
+		pathsent="$rpath"
+	fi
+
+	n=`cat /var/spool/hylafax/docq/seqf`
+	n=$(($n-2))	
+	File=`find /var/spool/hylafax/docq/ -name "doc$n.*"`
+        ext=`echo $File | cut -d '.' -2f`
+
+	if [ ! -z $File ] && [ -f $File ]; then  	 #verifico se esiste il file inviato non vuoto
+   		if [ ! -f $DOCHOME$pathsent/$doc_id.tif ]; then # verifico che il file non sia gia' stato archiviato
+			case "$ext" in # verifico se e' tif o altro per decidere se copiare o convertire
+			"tif"|"tiff"|"TIF"|"TIFF")
+				cp $File $DOCHOME$pathsent/$doc_id.tif ; chmod 777 $DOCHOME$pathsent/$doc_id.tif 
+				;;
+			*)
+            			gs -q -sDEVICE=tiffg3 -dNOPAUSE -dSAFER=true -sPAPERSIZE=a4 -dFIXEDMEDIA -dBATCH -r209.10\x98 "-sOutputFile=$DOCHOME$pathsent/$doc_id.tif" $File ; chmod 644 $DOCHOME$pathsent/$doc_id.tif
+				;;
+			esac
+    		fi
+	else
+		logger -t Hylfax "Can't save sent file (jobid: $jobid)"
+	fi
+	
+	if [ ! -f "$DOCHOME/thumb/$doc_id-15.png" ]; then
+   		 if [ -f $DOCHOME$pathsent/$doc_id.tif ]; then #fax mandato da whfc
+       			tifftopnm $DOCHOME$pathsent/$doc_id.tif >$DOCHOME/tmp/$doc_id.pnm
+      			 pamcut -pad -bottom 600 -left 40 -right 1600 -top 0 $DOCHOME/tmp/$doc_id.pnm > $DOCHOME/tmp/$doc_id.cut.pnm
+       			pnmscale 0.5 $DOCHOME/tmp/$doc_id.cut.pnm > $DOCHOME/tmp/$doc_id.cut50.pnm
+		       #scrivo il thumbnail ottenuto nella directory thumb
+     			  pnmtopng $DOCHOME/tmp/$doc_id.cut50.pnm >$DOCHOME/thumb/$doc_id-15.png
+		        chmod go+r $DOCHOME/thumb/$doc_id-15.png
+
+      			 #cancello i file intermedi
+       			rm -rf $DOCHOME/tmp/$doc_id*
+    		fi
+	fi
+	
+;;
+
+*)
+	exit 0
+;;
+
+esac
+
+dbquery "$execquery"

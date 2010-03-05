@@ -1,0 +1,155 @@
+#!/usr/bin/perl -wT
+# vim: ft=xml:
+#----------------------------------------------------------------------
+# heading     : Configuration
+# description : Fax Server
+# navigation  : 6000 6710
+# 
+# Copyright (c) 2008 Nethesis based on a work of  Christian DUMONT (GLA)
+# Version : 0.7.0.6
+# date : 20/11/2008
+#----------------------------------------------------------------------
+
+
+
+use strict;
+use esmith::FormMagick::Panel::faxsrv;
+my $f = esmith::FormMagick::Panel::faxsrv->new();
+$f->display();
+
+__DATA__
+<form title="FORM_TITLE" 
+      header="/etc/e-smith/web/common/head.tmpl" 
+      footer="/etc/e-smith/web/common/foot.tmpl">
+      <!-- Page 0 -->
+      <page name="First" pre-event="print_status_message()">
+          <description>DESC_FAX_SERVER</description>
+          <subroutine src="show_conf()" />
+      </page> 
+      <!-- Page 1 -->
+      <page name="SVC_OnOff" pre-event="turn_off_buttons">
+          <description>SVCONOFF</description>
+          <subroutine src="svc_ena_disa()" />
+      </page> 
+      <!-- Page 2 -->
+      <page name="ConfigModem"  
+	    post-event="change_modem_settings()" 
+	    pre-event="turn_off_buttons()">
+      <description>DESC_FAX_SERVER</description>
+      <field 
+            type="text" 
+		        id="CountryCode" 
+		        value="get_value('CountryCode')">
+		        <label>COUNTRY_CODE</label>
+	          <description>DESC_NUM_FAX</description>
+      </field>
+	    <field 
+            type="text" 
+		        id="AreaNumber" 
+		        value="get_value('AreaNumber')">
+		        <label>AREA_NUMBER</label>
+      </field>
+	    <field 
+            type="text" 
+		        id="FaxNumber" 
+		        value="get_value('FaxNumber')">
+		        <label>NUM_FAX</label>
+      </field>
+
+	    <field 
+            type="text" 
+		        id="FaxName" 
+		        value="get_value('FaxName')">
+	          <label>LOCAL_ID</label>
+	          <description>DESC_LOCAL_ID</description>
+      </field>
+           <field
+            type="select"
+                        id="FaxDevice"
+                        options="'ttyS0' => 'COM1 (ttyS0)','ttyS1' => 'COM2 (ttyS1)','ttyS2' => 'COM3 (ttyS2)','ttyACM0' => 'USB (ttyACM0)'"
+                        value="get_value('FaxDevice')">
+                        <label>COMPORT</label>
+                        <description>DESC_COMPORT</description>
+            </field>
+          <field
+            type="select"
+                        id="Mode"
+                        options="'both' => 'both','receive' => 'receive','send' => 'send'"
+                        value="get_value('Mode')">
+                        <label>MODE</label>
+                        <description>DESC_MODE</description>
+            </field>
+
+       	    <field 
+            type="select" 
+		        id="WaitDialTone" 
+		        options="'enabled' => 'Enabled','disabled' => 'Disabled'"
+            value="get_value('WaitDialTone')">
+	          <label>WAITDIALTONE</label>
+	          <description>DESC_WAITDIALTONE</description>
+      </field>
+      <field
+            type="text"
+                        id="PBXPrefix"
+                        value="get_value('PBXPrefix')">
+                        <label>PBX_PREFIX</label>
+                  <description>DESC_PBX_PREFIX</description>
+      </field>
+
+
+      <field 
+            type="select" 
+		        id="SendTo" 
+		        options="list_accounts()"
+			value="get_value('SendTo')">
+	          <label>SENDTO</label>
+	          <description>DESC_SENDTO</description>
+      </field>
+      <field 
+            type="select" multiple="1"
+		        id="DispatchFileType" 
+		        options="'pdf' => 'PDF','ps' => 'PS','tif'=>'TIFF'"
+            value="get_value('DispatchFileType')">
+	          <label>DISPATCH_FTYPE</label>
+      </field>
+      <field 
+            type="select" multiple="1"
+		        id="NotifyFileType" 
+		        options="'pdf' => 'PDF','ps' => 'PS','tif'=>'TIFF'"
+            value="get_value('NotifyFileType')">
+	          <label>NOTIFY_FTYPE</label>
+	          <description>DESC_NOTIFY_FTYPE</description>
+      </field>
+      <field 
+            type="select" 
+		        id="ClientShowReceived"
+		        options="'disabled' => 'Disabled','enabled' => 'Enabled'"
+		        value="get_value('ClientShowReceived')">
+	          <label>CLIENT_SHOW</label>
+	          <description>DESC_CLIENT_SHOW</description>
+      </field>
+      <field 
+            type="select"
+		        id="PrinterName"
+			options="list_printers()"
+		        value="get_value('PrinterName')">
+	          <label>AUTO_PRINT</label>
+	          <description>DESC_AUTO_PRINT</description>
+      </field>
+      <field 
+            type="select" 
+		        id="SambaFax"
+			options="'disabled' => 'Disabled','enabled' => 'Enabled'"
+		        value="get_value('SambaFax')">
+	          <label>SAMBAFAX</label>
+	          <description>DESC_SAMBAFAX</description>
+      </field>
+
+ 	   
+      <subroutine src="print_button('SAVE')" />
+    </page>
+      <!-- Page 3 -->
+      <page name="Done_modem" pre-event="turn_off_buttons">
+      <description>SUCCESS</description>
+      </page> 
+</form>

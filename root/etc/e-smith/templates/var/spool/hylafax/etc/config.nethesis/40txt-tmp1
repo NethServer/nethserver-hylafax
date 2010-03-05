@@ -1,0 +1,4 @@
+DialStringRules:	etc/dialrules
+ServerTracing:		1
+LogFileMode:		0600
+DeviceMode:		0600

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+. /etc/sysconfig/i18n
+export LANG
+exec /usr/sbin/faxq -D 2>&1
+

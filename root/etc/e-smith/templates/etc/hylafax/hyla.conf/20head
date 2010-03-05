@@ -1,0 +1,8 @@
+# KillTime: time before expiring a job.
+# Default is 3 hours. Equivalent to 'sendfax' -k option. 
+# Tipically this is needed when bulk faxing.
+#KillTime: "now +24 hours"    # Give jobs 24h before expiring them
+
+# Notify policy (for outgoing faxes).
+# Default is to notify only in case of problems. Equivalent to 'sendfax'
+# -D option.

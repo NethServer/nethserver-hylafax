@@ -1,0 +1,288 @@
+<!-- vim: ft=xml:
+-->
+<lexicon lang="it">
+    <entry>
+        <base>FORM_TITLE</base>
+	<trans>Configurazione del server fax.</trans>
+    </entry>	
+    <entry>
+        <base>DESC_FAX_SERVER</base>
+        <trans><![CDATA[
+	    <p>
+            Il server fax permette di ricevere e inviare fax attraverso un modem collegato direttamente a NethService. <br/> Il modem deve supportare l'invio e la ricezione di fax preferibilmente in classe 1 o 1.0 (sono supportati anche le classi 2, 2.0 e 2.1).
+            </p>
+	      ]]> 
+        </trans>	
+    </entry>
+
+    <entry> 
+        <base>DESC_NUM_FAX</base>
+        <trans><![CDATA[
+	   <h2>Configurazione generale</h2>
+           Il numero di telefono del fax è composto da tre parti: prefisso internazionale, prefisso locale e numero vero e proprio.<br/>
+           Il server fax utilizza i dati relativi al numero per comporre il corretto prefisso in base al destinatario.
+        ]]></trans>	
+    </entry>
+    <entry>
+        <base>NUM_FAX</base>
+        <trans>Numero Fax</trans>
+    </entry>
+    <entry>
+        <base>DESC_LOCAL_ID</base>
+        <trans><![CDATA[
+            <p>
+	     Il mittente fax viene generalmente stampato dal fax ricevente nella prima riga del fax, in alto. <br/> 
+	     E' possibile inserire il numero di fax oppure un nome di lughezza massima pari a 20 caratteri (consigliato il nome dell'azienda). 
+            </p>
+            ]]></trans>
+    </entry>
+    <entry>
+        <base>LOCAL_ID</base>
+        <trans>Mittente Fax (TSI)</trans>
+    </entry>
+ 
+    <entry>
+        <base>YES</base>
+        <trans>Si</trans>
+    </entry>
+    <entry>
+        <base>NO</base>
+        <trans>No</trans>
+    </entry>
+    
+  
+    <entry>
+        <base>SUCCESS</base>
+        <trans>
+	   I nuovi parametri del Server Fax sono stati salvati.
+        </trans>
+    </entry>
+
+    <entry>
+        <base>SAVE</base>
+        <trans>Salva</trans>
+    </entry>
+    <entry>
+        <base>Configuration</base>
+        <trans>Configurazione</trans>
+    </entry>
+
+    <entry>
+        <base>Fax Server</base>
+	      <trans>Server Fax</trans>
+    </entry>
+
+    <entry>
+      <base>ERR_NO_FAXSRV_RECORD</base>
+      <trans>Impossibile leggere il record dal database di configurazione di Hylafax.</trans>
+    </entry> 
+
+
+    <entry>
+      <base>BUTTON_LABEL_CREATE</base>
+      <trans>Cambia configurazione</trans>
+    </entry>
+
+    <entry>
+      <base>SHOW_FAX_CONF</base>
+      <trans>La tabella mostra l'attuale configurazione del Server Fax.</trans>
+    </entry>
+    
+    <entry>
+      <base>LABEL_NAME</base>
+      <trans>Nome del parametro</trans>
+    </entry>
+
+    <entry>
+      <base>LABEL_VALUE</base>
+      <trans>Valore</trans>
+    </entry>
+
+    <entry>
+      <base>NO_FAX_CONF</base>
+      <trans>Impossibile leggere il database di configurazione di Hylafax.</trans>
+    </entry>
+
+    <entry>
+      <base>COUNTRY_CODE</base>
+      <trans>Prefisso internazionale</trans>
+    </entry>
+
+    <entry>
+      <base>AREA_NUMBER</base>
+      <trans>Prefisso</trans>
+    </entry>
+
+
+    <entry>
+      <base>COMPORT</base>
+      <trans>Porta</trans>
+    </entry>
+
+    <entry>
+      <base>DESC_COMPORT</base>
+      <trans><![CDATA[
+<hr class="sectionbar" /><h2>Modem</h2>
+  
+ Il modem deve essere collegato direttamente al server attraverso un porta seriale (COM) o USB.
+]]></trans>
+    </entry>
+
+    <entry>
+      <base>MODE</base>
+      <trans>Modalità </trans>
+    </entry>
+
+    <entry>
+      <base>DESC_MODE</base>
+      <trans>E' possibile utilizzare il modem per ricevere e inviare fax selezionado la modalità   "Invio e ricezione". Selezionando "Solo ricezione" il modem risponderà  alle chiamate in arrivo e riceverà  i fax, ma non potrà  essere utilizzato per inviare fax. In modalità  "Solo Invio", il modem non risponderà  alle chiamate, ma permetterà  l'invio di fax attraverso la linea telefonica.</trans>
+    </entry>
+
+    <entry>
+      <base>WAITDIALTONE</base>
+      <trans>Attesa segnale di linea libera</trans>
+    </entry>
+        <entry>
+      <base>DESC_WAITDIALTONE</base>
+      <trans><![CDATA[
+            <p>
+             Alcuni modem non sono in grado di riconoscere il tono di linea libera (in particolare se collegati a centralini) e non compongono il numero segnalando l'assenza di tono (errore "No Dial Tone"). <br/>
+E' possibile configurare il modem per ignorare l'assenza di linea e comporre immediatamente il numero. L'impostazione raccomandata è "Abilitato", si consiglia di disattivare l'attesa solo in caso di problemi.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+    
+
+        <entry>
+      <base>DESC_SENDTO</base>
+      <trans><![CDATA[
+		<hr class="sectionbar" /><h2>Formati e notifiche</h2>
+            <p>
+		Il server fax, come operazione predefinita, inoltra i fax ricevuti sotto forma di e-mail con allegato. Specificare l'indirizzo e-mail a cui si desidera inoltrare i fax, altrimenti scegliere "Disabilitato" per disabilitare l'inoltro.<br/>
+ Selezionare uno o più formati per l'allegato. Se non si desidera ricevere il fax in allegato, ma solo una notifica di ricezione, deselezionare tutti i formati.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+    <entry>
+      <base>DISPATCH_FTYPE</base>
+      <trans>Formato fax ricevuti</trans>
+    </entry>
+        <entry>
+      <base>NOTIFY_FTYPE</base>
+      <trans>Formato fax inviati</trans>
+    </entry>
+        <entry>
+      <base>DESC_NOTIFY_FTYPE</base>
+      <trans><![CDATA[
+            <p>
+	    Se il client che invia il fax lo richiede, il server inoltra una notifica d'invio sotto forma di e-mail con allegato. <br/>
+	    Scegliere il formato in cui si preferisce ricevere il fax allegato. Se non si desidera ricevere il fax in allegato deselezionare tutti i formati.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+
+    <entry>
+      <base>SAMBAFAX</base>
+      <trans>SambaFax</trans>
+    </entry>
+   
+    
+    <entry>
+      <base>DESC_SAMBAFAX</base>
+      <trans><![CDATA[
+            <p>
+Il server fax può mettere a disposizione della rete locale una stampante virtuale, denominata "sambafax" che dovrà  essere configurata sui client, selezionando il driver Apple LaserWriter 16/600 PS. I documenti stampati sulla stampante di rete sambafax dovranno contenere esattamente la dicitura "Numero Fax:" seguita dal numero di fax del destinatario.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+     <entry>
+      <base>enabled</base>
+      <trans>Abilitato</trans>
+    </entry>    
+     <entry>
+      <base>disabled</base>
+      <trans>Disabilitato</trans>
+    </entry>    
+      <entry>
+      <base>Enabled</base>
+      <trans>Abilitato</trans>
+    </entry> 
+     <entry>
+      <base>Disabled</base>
+      <trans>Disabilitato</trans>
+    </entry>
+     <entry>
+      <base>send</base>
+      <trans>Solo invio</trans>
+    </entry>
+    <entry>
+      <base>receive</base>
+      <trans>Solo ricezione</trans>
+    </entry>
+    <entry>
+      <base>both</base>
+      <trans>Invio e ricezione</trans>
+    </entry>
+    <entry>
+      <base>NOTIFY</base>
+      <trans>Inoltra notifiche di invio</trans>
+    </entry>    
+
+    <entry>
+      <base>PBX_PREFIX</base>
+      <trans>Prefisso centralino</trans>
+    </entry>    
+    <entry>
+      <base>CLIENT_SHOW</base>
+      <trans>Visualizzazione fax in arrivo dai client</trans>
+    </entry>
+    <entry>
+      <base>DESC_CLIENT_SHOW</base>
+      <trans><![CDATA[
+<hr class="sectionbar" /><h2>Funzioni aggiuntive</h2>
+I client fax consentono anche di visualizzare tutti i fax in arrivo. Se, per motivi di riservatezza, si desidera inibire la visione dei fax ricevuti, selezionare "Disabilitato".
+]]></trans>
+    </entry>    
+    
+    <entry>
+      <base>AUTO_PRINT</base>
+      <trans>Stampa automatica su</trans>
+    </entry>
+    <entry>
+      <base>DESC_AUTO_PRINT</base>
+      <trans>E' possibile stampare automaticamente tutti i fax ricevuti su una stampante HP LaserJet compatibile (PCL5). Vedere la documentazione per altre stampanti compatibili.
+Selezionare "Disabilitato" per disabilitare la stampa automatica dei fax.</trans>
+    </entry>    
+    
+    <entry>
+      <base>SENDTO</base>
+      <trans>Inoltra fax ricevuti a</trans>
+    </entry>
+    
+    <entry>
+      <base>DESC_PBX_PREFIX</base>
+      <trans><![CDATA[
+            <p>
+		Se il modem fax è collegato ad un centralino, potrebbe essere necessario inserire un prefisso per "prendere la linea esterna".<br/>
+ 		Se il modem è direttamente collegato ad una linea, oppure il centralino non richiede prefisso, lasciare il campo vuoto.<br/>
+            Se per chiamare si utilizza un centralino, inserire il prefisso da comporre
+            </p>
+            ]]> 
+</trans>
+    </entry>    
+    
+    <entry>
+      <base>CONFIG_OK</base>
+      <trans>Server fax configurato correttamente.</trans>
+    </entry>
+    <entry>
+      <base>CONFIG_ERROR</base>
+      <trans>Errore durante la configurazione del server fax. Controllare /var/log/addmodem.log per maggiori dettagli. </trans>
+    </entry>
+    
+</lexicon>
+

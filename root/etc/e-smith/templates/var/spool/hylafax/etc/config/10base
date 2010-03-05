@@ -1,0 +1,18 @@
+FaxRcvdCmd: bin/faxrcvd
+
+{
+
+my $report = $hylafax{'SummaryReport'} || 'disabled';
+
+if ($report eq 'enabled' )
+{
+  $OUT.="NotifyCmd: bin/notify.report";
+}
+else
+{
+  $OUT.="NotifyCmd: bin/notify";
+}
+
+}
+
+

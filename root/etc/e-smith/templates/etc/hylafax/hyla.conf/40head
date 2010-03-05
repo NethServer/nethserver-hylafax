@@ -1,0 +1,4 @@
+# Disable PageChopping. Default is to chop.
+#PageChop: none    # Avoid page chopping
+
+# Cover page date format.

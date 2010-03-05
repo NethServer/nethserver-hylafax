@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ ! -d /home/e-smith/hylafax ]; then
+        mkdir -p /home/e-smith/hylafax
+fi
+
+cp -pr /var/spool/hylafax/recvq /home/e-smith/hylafax/
+cp -pr /var/spool/hylafax/doneq /home/e-smith/hylafax/
+cp -pr /var/spool/hylafax/docq /home/e-smith/hylafax/
+cp -pr /var/spool/hylafax/log /home/e-smith/hylafax/
+cp -pr /var/spool/hylafax/sendq /home/e-smith/hylafax/
+cp -pr /var/spool/hylafax/log /home/e-smith/hylafax/
+cp -pr /var/spool/hylafax/info /home/e-smith/hylafax/
+cp -pr /var/spool/hylafax/etc /home/e-smith/hylafax/

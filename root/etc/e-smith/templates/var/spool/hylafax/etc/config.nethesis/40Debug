@@ -1,0 +1,10 @@
+{
+  # debug disabilitato per default
+  my $debug = $hylafax{'Debug'} || 'disabled';
+  if($debug eq 'enabled') {
+    $OUT.="SessionTracing:	0xFFF";
+  }
+  else {
+    $OUT.="SessionTracing:	11";
+  }
+}

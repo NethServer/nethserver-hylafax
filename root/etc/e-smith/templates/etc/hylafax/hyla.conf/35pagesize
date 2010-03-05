@@ -1,0 +1,18 @@
+{
+    use esmith::config;
+    use esmith::db;
+
+    my %conf;
+    tie %conf, 'esmith::config';
+    my $PaperSize = '';
+
+    $PaperSize = db_get_prop(\%conf, 'hylafax', 'PaperSize');
+    if ( $PaperSize eq 'letter' )
+    {
+      $OUT .= 'PageSize: letter';
+    }
+    else
+    {
+      $OUT .= 'PageSize: A4';
+    }
+}

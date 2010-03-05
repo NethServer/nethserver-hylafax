@@ -1,0 +1,70 @@
+#!/usr/bin/perl -w
+
+#----------------------------------------------------------------------
+# copyright (C) 2008 Nethesis, based on a work oj Christian DUMONT (aka GLA).
+#		
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#----------------------------------------------------------------------
+
+package esmith;
+
+use strict;
+use Errno;
+use esmith::config;
+use esmith::util;
+use esmith::db;
+
+my $mabase;
+my $ComPort;
+my $NomFichier;
+my %conf;
+tie %conf, 'esmith::config';
+
+our $db = esmith::ConfigDB->open
+          or die("Unable to open the configuration database. \n");
+
+$mabase = $db->get('hylafax')
+   or die("Unable to find Hylafax record in configuration database. \n");
+
+# Template Hylafax config 
+esmith::util::processTemplate (\%conf,"/var/spool/hylafax/etc/config"); 
+esmith::util::processTemplate (\%conf,"/var/spool/hylafax/etc/FaxDispatch"); 
+esmith::util::processTemplate (\%conf,"/var/spool/hylafax/etc/FaxNotify"); 
+esmith::util::processTemplate (\%conf,"/var/spool/hylafax/etc/FaxAccounting"); 
+esmith::util::processTemplate (\%conf,"/var/spool/hylafax/etc/config.nethesis"); 
+esmith::util::processTemplate (\%conf,"/var/qmail/alias/.qmail-sendfax"); 
+
+# Template inittab
+esmith::util::processTemplate (\%conf,"/etc/inittab");
+
+# Template hyla.conf
+esmith::util::processTemplate (\%conf,"/etc/hylafax/hyla.conf");
+
+# execute faxaddmodem
+system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log") == 0
+   or die("Hylafax config: can't add modem. See /var/log/addmodem.log for details. \n");
+
+# run init q 
+system("/sbin/init q") == 0
+    or die("Hylafax config : error during init cmd. \n");
+
+
+# Template SambaFax Printer
+esmith::util::processTemplate (\%conf,'/etc/printcap');
+
+# Restasrt services
+system( "/sbin/e-smith/service faxq restart >> /var/log/modemconfig.log") == 0
+      or die ("Hylafax config : Error occurred during faxq restart. [$!] \n");
+system( "/sbin/e-smith/service hfaxd restart >> /var/log/modemconfig.log") == 0
+      or die ("Hylafax config : Error occurred during hfaxd restart. [$!] \n");
+system( "/sbin/e-smith/service lpd restart >> /var/log/modemconfig.log") == 0
+      or die ("Hylafax config : Error occurred during LPD restart. [$!] \n");
+system( "/sbin/e-smith/service smb restart >> /var/log/modemconfig.log") == 0
+      or die ("Hylafax config : Error occurred during SMBD restart. [$!] \n");
+
+exit (0);
+
+

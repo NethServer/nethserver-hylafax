@@ -1,0 +1,19 @@
+{
+    use esmith::config;
+    use esmith::db;
+
+    my %conf;
+    tie %conf, 'esmith::config';
+    my $DateFormat = '';
+
+    $DateFormat = db_get_prop(\%conf, 'hylafax', 'DateFormat');
+    if ( $DateFormat eq 'DMY' )
+    {
+      $OUT .= 'DateFormat: "%d/%m/%Y %H:%M:%S"';
+    }
+    else
+    {
+      $OUT .= 'DateFormat: "%m/%d/%Y %H:%M:%S"';
+    }
+}
+

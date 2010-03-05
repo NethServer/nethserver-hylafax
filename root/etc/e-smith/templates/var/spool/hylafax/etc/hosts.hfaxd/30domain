@@ -1,0 +1,11 @@
+{
+$Auth = $hylafax{'Auth'} || 'both';
+if($Auth eq 'both' || $Auth eq 'host') {
+
+   my $domain = $DomainName;
+   $domain =~ s/\./\\./g;
+   $OUT.='.*@.*\.'.$domain;
+
+}
+
+}

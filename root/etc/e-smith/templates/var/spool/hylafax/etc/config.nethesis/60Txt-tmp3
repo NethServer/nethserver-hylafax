@@ -1,0 +1,8 @@
+TagLineFont:		etc/lutRS18.pcf
+TagLineFormat:		"Da %%l|%c|Pagina %%P di %%T"
+MaxRecvPages:		200
+#
+#
+# Modem-related stuff: should reflect modem command interface
+# and hardware connection/cabling (e.g. flow control).
+#

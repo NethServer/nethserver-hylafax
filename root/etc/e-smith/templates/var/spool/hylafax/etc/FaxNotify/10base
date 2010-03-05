@@ -1,0 +1,14 @@
+{
+
+my $fileType = $hylafax{'NotifyFileType'} || 'pdf';
+$fileType =~ s/,/\ /g;
+my $lang = $hylafax{'Lang'} || 'it_IT';
+my $notifyMaster = $hylafax{'NotifyMaster'} || 'never';
+
+
+$OUT.="RETURNFILETYPE=\"$fileType\"\n";
+$OUT.="LANG=$lang\n";
+$OUT.="NOTIFY_FAXMASTER=$notifyMaster\n";
+
+}
+

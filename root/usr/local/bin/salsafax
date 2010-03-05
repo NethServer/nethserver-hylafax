@@ -1,0 +1,291 @@
+#!/usr/bin/perl -w
+
+##########################################################################
+#
+#                   SALSAFAX
+#
+# This perl script routes postscript printerdata from printerspooler to
+# faxsend. It is typically used in a print-to-fax setup. Read more about
+# its purpose on www.purpel3.com/sambafax/
+#
+# After installing run this script from the commandline:
+#      echo blah | ./salsafax
+#
+# This will learn if there are any dependancies unsolved: this tool is
+# dependant upon the following:
+#    perl (we tested with v5.6 and its likely any v5 will do)
+#    perl module Getopt-Long-2.32
+#    perl module Mail-Sendmail-0.78
+#    sendmail (from the hylafax package)
+#    ps2ascii (comes with the ghostscript package)
+#
+# After you run salsafax without any errors you can deploy it meaningfull.
+#
+
+use strict;
+use Getopt::Long;
+Getopt::Long::Configure qw(bundling pass_through);
+use Mail::Sendmail;
+
+# constants you must check if they are ok
+my $ALLOWMULTIFAX = 0;                        # allow (1) or not (0) multiple faxdestinations
+my $EMAILFROMDOC = 0;                         # get the emailaddress from samba (0) or the doc (1)
+my $SENDFAX = "/usr/bin/sendfax";             # the command to send a fax
+my $PS2ASCII = "/usr/bin/ps2ascii";           # the command to convert postscript to readable text
+
+# constants you can alter but should consider not to
+my $TMPDIR = "/tmp/";                         # the directory to store temporary files
+my $MYNAME = "salsafax";                      # the name of this tool
+my $LOGFILE = $TMPDIR . $MYNAME . ".log";     # the name of the logfile - debugging sessions only
+my $PSFILE = $TMPDIR . $MYNAME . ".ps." .$$ ; # the name of the postscript temporary file
+my $MAILADDRESS = 'postmaster@localhost';     # the default mailaddress for errormessages
+my $MULTISEP = ";";                           # if you have more than 1 faxnr on a line, they are seperated by ;
+                                              #    this character should NOT appear in $DIGITS
+my $DEBUG=0;
+
+# constants you really should not touch !!!
+#my $FAXID = 'Fax-Nr[s]{0,1}\s*:\s*';          # search string for fax-nr
+my $FAXID = 'Numero Fax[s]{0,1}\s*:\s*';          # search string for fax-nr
+my $FAXIDS = 'Fax-Nrs\s*:\s*';                # search string for fax-nrs ( for multifax }
+my $DIGITS = '0123456789+( ),-';              # digits allowed in the faxnr
+my $MODEMLIKES = '0123456789+,';              # digits my modem will not reject: ,=wait +=int.access
+                                              #   this should be a subset of $DIGITS
+my $EMAILDOC = 'E-m@il :';                    # the string to look for an emailaddress
+
+########## from here on, leave the code alone, unless you are really sure ############
+
+#variables
+my @faxlines;                                 # stores the raw faxlines
+my @faxdest;                                  # stores the faxnumbers
+my $MultiFax = 0;                             # determines if ENDuser specified to multifax
+my $mailaddress = "";                         # how do we treat the errormessages
+my $lpuser = "";                              # username retrieved from lprng or lpd commandline
+my $lphost = "";                              # hostname retrieved from lprng or lpd commandline
+my @emaillines;                               # stores the documentlines containing EMAILDOC
+
+
+# check some dependencies
+if ( ! -d $TMPDIR ) {
+  print("Error: temporary directory not found: ", $TMPDIR );
+  exit 1;
+}
+if ( ! -e $SENDFAX ) {
+  Log("Error: sendfax command not found: ", $SENDFAX );
+  exit 1;
+}
+if ( ! -e $PS2ASCII ) {
+  Log("Error: ghostscript command not found: ", $PS2ASCII );
+  exit 1;
+}
+
+
+# get usefull parameters
+my $cupsfile = $ARGV[5];      # CUPS parses a filename with the printdata as the 6th parameer
+                              # this could be undef (after lpr -d blah) or a filename (after a samba action)
+my $cupsuser = $ARGV[1];      # CUPS paresed the username with the printdata as the 2nd parameter
+                              # this is usually a user from localhost
+GetOptions( 'h=s' => \$lphost,  # LPD and LPRng parse host and user name under the -h and -n parameter
+            'n=s' => \$lpuser); # the postscript is parsed to it in a pipe - to be found in STDIN
+
+
+# ok lets find out where we can send the mail to
+if ( ( $lphost ) and ( $lpuser ) ) {  #if the user and host can be found on the commandline
+  $mailaddress = $lpuser . '@' . $lphost ;
+} elsif ( $cupsuser) {
+  $mailaddress = $cupsuser . '@localhost' ;
+} else {
+  $mailaddress = $MAILADDRESS;
+}
+
+# where is the printerdata?
+if ( ( $cupsfile ) and ( -e $cupsfile ) ) {
+  $PSFILE = $cupsfile;
+} else {
+  &SavePostscriptdata;
+}
+
+
+# ok we have a postscriptfile, now
+if ( &RetrieveRawFaxline ) {   # we found one ore more lines
+  if ( &ExtractFaxnumber ) {   # we could extract a real faxnumber
+    if ($EMAILFROMDOC) {
+      $mailaddress = &GetEmailFromDoc;
+    }
+    &TrySending;
+  } else {                     # no real faxnumber could be extracted
+    &SendErrorMail;
+  }
+} else {                       # no lines with faxnr found
+  &SendErrorMail;
+}
+
+# delete the printfile in any case
+unlink $PSFILE;
+
+# always exit gracefully.
+exit 0;
+
+
+# sub #################################################
+# save the information in the pipe to the ps tmp file
+sub SavePostscriptdata {
+  open PS, ">".$PSFILE or die("Sorry, cannot open temporary postscript file $PSFILE .\n");
+  while (<STDIN>) {
+    print PS $_ ;
+  }
+  close PS;
+}
+
+# sub #################################################
+sub RetrieveRawFaxline {
+  my $CL = $PS2ASCII . " " . $PSFILE . " |";
+  my $ret = 0;
+
+  open CL, $CL;                   # carry out ps2ascii on the ps-file and return the output into perl
+  while (my $line=<CL>) {
+    chomp $line;
+    if ($line =~ /$FAXID/i) {     # if the rawline matches with fax-nr
+      push @faxlines, $line ;     # add it to the stack of matching lines
+      $ret++;
+    }
+    if ($line =~ /$FAXIDS/i) {    # if the rawline matches with fax-nrs
+      $MultiFax = 1;              # the userties to multifax
+    }
+    if ($line =~ /$EMAILDOC/i) {  # if the rawline matches with "email"
+      push @emaillines, $line;    # add it to the emailstack
+    }
+  }
+  close CL;
+
+  # check the multifax setting
+  $MultiFax = $ALLOWMULTIFAX if $MultiFax;   # ALLOWMULTIFAX overrides Multifax
+
+  return $ret;
+}
+
+
+# sub #################################################
+sub ExtractFaxnumber {
+  my $ret = 0;                                # return value: 0=nothing found, more=ok
+
+  if ( $MultiFax ) {                          # extract all the faxnumbers you can find
+    for ( my $i=0; $i<@faxlines; $i++) {      # for all the rawline
+      push @faxdest, &GetFaxNumbersFrom($faxlines[$i]);  #extract the numbers
+    }
+    $ret = @faxdest;
+  } else {                 # just extract the first faxnumber in the first line
+    my @fns = &GetFaxNumbersFrom($faxlines[0]); # extract the numbers from the first raw line
+    if ( defined $fns[0] ) {                    # if it exists
+      push @faxdest, $fns[0];                   # put it on the return stack
+      $ret++;
+    }
+  }
+
+  return $ret;
+}
+
+
+# sub #################################################
+sub GetFaxNumbersFrom {
+  my @ret = ();
+  my $rawline = shift;
+  if ( defined $rawline ) {
+
+    my $ModemRejects = "[^" . $MODEMLIKES . "]"; # regexp with non-modem chars
+
+    if ( $rawline =~ /$FAXIDS/i ) {              #line contains fax-nrs
+      $rawline =~ s/$FAXID/;/gi ;                # substitute all the Fax-Nr with an ;
+      my @fnrs = split(/;/, $rawline);           # split the line up between non-allowed digits
+      for ( my $i=0; $i<@fnrs; $i++) {           # for all the splitups
+        my $f = $fnrs[$i];
+        my $goodpart = '([' . $DIGITS . ']*)[^' . $DIGITS . ']*.*$';
+        $f =~ s/$goodpart/$1/ ;                  # keep the goodpart
+        $f =~ s/$ModemRejects//g;                # remove all the non-modem characters
+        if ( $f gt "" ) {                        # and if anything is left
+          push @ret, $f;                         # add it to the return stack
+        }
+      }
+    } else {   # if we find a faxnr, take special care
+      my $re = '^.*' . $FAXID;                   # search for fax-nr
+      $re .= "(";
+      $re .= "[" . $DIGITS . "]*";               # followed by allowed digits
+      $re .= ")";
+      $re .= "[^" . $DIGITS . ']*.*$';           # followed by non-allowed digits
+
+      $rawline =~ s/$re/$1/i ;                    # and extract the allowed part from it
+
+      $rawline =~ s/$ModemRejects//g;            # then remove all the non-modem characters
+      if ( $rawline gt "" ) {                    # and if anything is left
+        push @ret, $rawline;                     # add it to the return stack
+      }
+    }
+  }
+  return @ret;
+}
+
+# sub #################################################
+sub GetEmailFromDoc {
+  my $result = $mailaddress;    # the default return is the existing mailaddress
+  if (@emaillines > 0) {        # if there are any emailsadresses found
+    # take the 1st found only, ignore the rest
+    # anything after the : is the emailaddress
+    (undef, my $em) = split(/:/, $emaillines[0]);
+    # remove trailing and leading spaces
+    $em =~ s/^\s*(\S*)\s*$/$1/;
+    # if there is a @ in the middle consider the email adress valid
+    if ($em =~ /\w+@\w+/) {
+      $result = $em;
+    }
+  }
+  return $result;
+}
+
+
+# sub #################################################
+sub TrySending {
+  for ( my $i=0; $i<@faxdest; $i++ ) {  # for every found faxnumber
+                                        # compile a commandline
+    my $fc = $SENDFAX . " -n -D -f " . $mailaddress . " -o " . $lpuser . " -d " . $faxdest[$i] . " " . $PSFILE ;
+    system $fc if not $DEBUG;           # and execute it
+    Log($fc);                           # and log it
+  }
+}
+
+# sub #################################################
+sub SendErrorMail {
+
+  my $mh = "\n";
+  $mh .= "The faxnumber is not recognized in your fax of " . localtime() . "\n";
+  $mh .= "\n";
+  $mh .= "The faxnumber is recognised via this text:\n";
+  $mh .= "   Fax-Nr : <faxnumber> \n";
+  $mh .= "\n";
+
+  if ( $ALLOWMULTIFAX ) {
+    $mh .= " or\n";
+    $mh .= "   Fax-Nrs : <faxnumber> ; <faxnumber> ; ... \n";
+    $mh .= "\n";
+  }
+
+  $mh .= "The 'Fax-Nr' part is not case sensitive.\n";
+  $mh .= "The characters allowed in the <faxnumber> are: '" . $DIGITS . "'.\n";
+  $mh .= "\n";
+  $mh .= "Please correct and retry.\n";
+
+  sendmail( To => $mailaddress ,
+            From => 'Your fax gateway <postmaster@localhost>',
+	          Subject => 'Your facsimile request failed.',
+	          Message => $mh
+          );
+
+  Log("sent errormail to $mailaddress");
+
+}
+
+
+# sub #################################################
+sub Log {
+  open LG, ">>" . $LOGFILE;
+  print LG join(" ", @_), "\n";
+  close LG;
+}

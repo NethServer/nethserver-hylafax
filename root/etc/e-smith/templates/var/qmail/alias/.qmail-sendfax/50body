@@ -1,0 +1,16 @@
+{
+  $mail = $hylafax{Mail2Fax} || 'disabled';
+
+  if ($mail eq 'enabled')
+  {
+  	$OUT.="| /var/spool/hylafax/bin/mail2fax.sh\n";
+  } 
+  else 
+  {
+    if ($EmailUnknownUser eq "returntosender") {
+       $OUT.="| bouncesaying 'Recipient unknown'";
+    } else {
+       $OUT.="$EmailUnknownUser";
+    }
+  }
+}

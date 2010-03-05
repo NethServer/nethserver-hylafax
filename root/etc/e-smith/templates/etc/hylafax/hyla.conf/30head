@@ -1,0 +1,12 @@
+
+# 'faxstat' output
+# Uncomment this to change the format of 'faxstat' output to show the
+# date/time the faxes will be/have been transmitted.
+#JobFmt: "%-4j %-19Y %1a %6.6o %-14.14e %5P %5D %.25s"  # faxstat -sdl output
+
+# Network HylaFAX server: redirect all client commands to an HylaFAX server.
+# Uncomment this if this system has no fax-modems connected to it, and there
+# is an HylaFAX server on your network. Equivalent to 'sendfax' -h option.
+#Host: faxserver.mydomain.dom
+
+# Pagesize; RPM default is 'a4'

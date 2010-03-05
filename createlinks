@@ -1,0 +1,42 @@
+#!/usr/bin/perl -w
+
+use esmith::Build::CreateLinks qw(:all);
+use File::Basename;
+use File::Path;
+
+templates2events("/var/spool/hylafax/etc/hosts.hfaxd",
+			qw(
+				bootstrap-console-save
+				post-upgrade
+				network-create
+				network-delete
+			));
+
+service_link_enhanced('faxq', 'S95', '7');
+service_link_enhanced('hfaxd', 'S96', '7');
+
+safe_symlink("/var/service/faxq", "root/service/faxq");
+safe_symlink("/var/service/hfaxd", "root/service/hfaxd");
+
+safe_symlink("../daemontools", "root/etc/rc.d/init.d/supervise/hfaxd");
+
+foreach (qw(FaxNotify FaxAccounting FaxDispatch))
+{
+    safe_symlink("/etc/e-smith/templates-default/template-begin-shell",
+        "root/etc/e-smith/templates/var/spool/hylafax/etc/$_/template-begin");
+}
+
+
+for my $event (qw(pre-backup))
+{
+    event_link("hylafax-backup", $event, "90");
+}
+
+
+#--------------------------------------------------
+# functions for manager panel
+#--------------------------------------------------
+my $panel = "manager";
+
+panel_link("faxsrv", $panel);
+

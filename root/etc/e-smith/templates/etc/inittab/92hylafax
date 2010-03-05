@@ -1,0 +1,5 @@
+{
+    $OUT = "# faxgetty $hylafax{FaxDevice}\n";
+    if (not -e "/var/spool/hylafax/etc/config.$hylafax{FaxDevice}") { $OUT .= "#"; }
+    $OUT .= "fax:23457:respawn:/usr/sbin/faxgetty ".$hylafax{FaxDevice};
+}

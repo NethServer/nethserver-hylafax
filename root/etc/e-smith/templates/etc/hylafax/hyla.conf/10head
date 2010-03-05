@@ -1,0 +1,15 @@
+# hyla.conf
+#
+# This is the system-wide config file used by HylaFAX client programs: 
+# sendfax, faxstat, faxalter, faxmail, faxrm, sendpage, faxwatch,
+# textfmt. 
+# The per-user config file is ~/.hylarc, which has the same syntax of
+# hyla.conf.
+#
+# Below you find some examples. Read the man pages of the HylaFAX client
+# programs for a complete list of the parameters that can be used in this file.
+#
+
+# Vertical resolution for outgoing faxes.
+# Default is 98 lines/inch, aka 'low', better is 196 lines/inch, aka 'fine'. 
+# Equivalent to 'sendfax' -l and -m options. 

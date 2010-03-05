@@ -1,0 +1,12 @@
+{
+    use esmith::config;
+    use esmith::db;
+
+    my %conf;
+    tie %conf, 'esmith::config';
+
+    my $Areazone;
+    {
+	   $OUT .= "AreaCode:             " . db_get_prop(\%conf, 'hylafax', 'AreaNumber');
+    }
+}

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -d /var/spool/hylafax ]; then
+    SPOOL=/var/spool/hylafax
+else
+    SPOOL=/var/spool/fax
+fi
+
+HFAXD_ARGS=
+if [ -f "$SPOOL/etc/pagermap" ] ; then
+    HFAXD_ARGS="-s snpp"
+fi
+
+exec /usr/sbin/hfaxd -d -i hylafax $HFAXD_ARGS 2>&1
+

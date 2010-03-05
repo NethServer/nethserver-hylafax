@@ -1,0 +1,46 @@
+#!/bin/bash
+hylaDir='/var/spool/hylafax/'
+faxDevice=`/sbin/e-smith/config getprop hylafax FaxDevice`
+PBXPrefix=`/sbin/e-smith/config getprop hylafax PBXPrefix`
+WaitDialTone=`/sbin/e-smith/config getprop hylafax WaitDialTone`
+Mode=`/sbin/e-smith/config getprop hylafax Mode`
+
+if [ -f "$hylaDir/etc/config.$faxDevice" ]; then
+   rm -rf "$hylaDir/etc/config.$faxDevice"
+fi
+
+/sbin/e-smith/expand-template "$hylaDir/etc/config.nethesis"
+mv "$hylaDir/etc/config.nethesis" "$hylaDir/etc/config.$faxDevice"
+
+/usr/sbin/faxaddmodem -nointeractive $faxDevice
+if [ ! $? -eq 0 ]; then
+  exit 1
+fi
+
+# Configurazione modalita': ricezione/invio/entrambi
+sed -i '/ModemReadyState/d' "$hylaDir/etc/config.$faxDevice"
+if [ "$Mode" == "receive" ]; then
+    echo 'ModemReadyState:        D' >> $hylaDir/etc/config.$faxDevice 
+elif [ "$Mode" == "send" ]; then
+    sed -i '/RingsBeforeAnswer/d' "$hylaDir/etc/config.$faxDevice"
+    echo "RingsBeforeAnswer:      0" >> "$hylaDir/etc/config.$faxDevice"
+fi
+
+# Configurazione prefisso centralino e attesa segnale di linea
+
+sed -i '/ModemDialCmd/d' "$hylaDir/etc/config.$faxDevice"
+
+if [ "$WaitDialTone" = 'enabled' ]; then
+  dial="ATDT"
+else
+  dial="ATX3DT"
+fi
+
+if [ $PBXPrefix ]; then
+   dial=$dial$PBXPrefix","
+fi
+
+echo "ModemDialCmd:      $dial%s" >> "$hylaDir/etc/config.$faxDevice"
+/sbin/e-smith/expand-template "$hylaDir/etc/config"
+
+exit 0

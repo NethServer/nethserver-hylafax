@@ -1,0 +1,10 @@
+{
+  # visualizzazione fax ricevuti disabilitata per default
+  my $perms = $hylafax{'ClientShowReceived'} || 'disabled';
+  if($perms eq 'enabled') {
+    $OUT.="RecvFileMode:                0644";
+  }
+  else {
+    $OUT.="RecvFileMode:                0600";
+  }
+}

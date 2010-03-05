@@ -1,0 +1,14 @@
+{
+   # default invia e ricevi
+   my $mode = $hylafax{'Mode'} || 'both';
+   
+   if($mode eq 'both') {
+     $OUT .= "RingsBeforeAnswer:      " . $hylafax{'RingsBeforeAnswer'};
+   } elsif ($mode eq 'send') { 
+     $OUT.='RingsBeforeAnswer:      0';
+   } elsif ($mode eq 'receive') {
+     $OUT.="ModemReadyState:        D\n";
+     $OUT.="RingsBeforeAnswer:      " . $hylafax{'RingsBeforeAnswer'};
+   }
+   
+}

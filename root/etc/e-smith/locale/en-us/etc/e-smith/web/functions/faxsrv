@@ -1,0 +1,286 @@
+<!-- vim: ft=xml:
+-->
+<lexicon lang="en">
+    <entry>
+        <base>FORM_TITLE</base>
+	<trans>Fax server configuration</trans>
+    </entry>	
+    <entry>
+        <base>DESC_FAX_SERVER</base>
+        <trans><![CDATA[
+	    <p>
+            The fax server enables sending and receiving fax using a modem directly connected to the server. <br/> The modem needs to support fax sending and receiving in class 1 or 1.0 (class 2, 2.0 and 2.1 are supported as well).
+            </p>
+	      ]]> 
+        </trans>	
+    </entry>
+
+    <entry> 
+        <base>DESC_NUM_FAX</base>
+        <trans><![CDATA[
+	   <h2>General Configuration</h2>
+           The fax number is formed by international prefix, local prefix and phone number. <br/>
+        ]]></trans>	
+    </entry>
+    <entry>
+        <base>NUM_FAX</base>
+        <trans>Fax Number</trans>
+    </entry>
+    <entry>
+        <base>DESC_LOCAL_ID</base>
+        <trans><![CDATA[
+            <p>
+             Fax sender is usually printed on top (first line) by the receiving fax machine. <br/>
+             You can enter a fax number or a name, at most 20 chars long (we recommend using the company name).
+            </p>
+            ]]></trans>
+    </entry>
+    <entry>
+        <base>LOCAL_ID</base>
+        <trans>Fax Sender (TSI)</trans>
+    </entry>
+ 
+    <entry>
+        <base>YES</base>
+        <trans>Yes</trans>
+    </entry>
+    <entry>
+        <base>NO</base>
+        <trans>No</trans>
+    </entry>
+    
+  
+    <entry>
+        <base>SUCCESS</base>
+        <trans>
+	  Configuration saved.
+        </trans>
+    </entry>
+
+    <entry>
+        <base>SAVE</base>
+        <trans>Save</trans>
+    </entry>
+    <entry>
+        <base>Configuration</base>
+        <trans>Configuration</trans>
+    </entry>
+
+    <entry>
+        <base>Fax Server</base>
+	      <trans>Fax Server</trans>
+    </entry>
+
+    <entry>
+      <base>ERR_NO_FAXSRV_RECORD</base>
+      <trans>Can't read Hylafax database record.</trans>
+    </entry> 
+
+
+    <entry>
+      <base>BUTTON_LABEL_CREATE</base>
+      <trans>Edit configuration</trans>
+    </entry>
+
+    <entry>
+      <base>SHOW_FAX_CONF</base>
+      <trans>The following table shows the actual configuration.</trans>
+    </entry>
+    
+    <entry>
+      <base>LABEL_NAME</base>
+      <trans>Parameter name</trans>
+    </entry>
+
+    <entry>
+      <base>LABEL_VALUE</base>
+      <trans>Value</trans>
+    </entry>
+
+    <entry>
+      <base>NO_FAX_CONF</base>
+      <trans>Can't read Hylafax database.</trans>
+    </entry>
+
+    <entry>
+      <base>COUNTRY_CODE</base>
+      <trans>Country code</trans>
+    </entry>
+
+    <entry>
+      <base>AREA_NUMBER</base>
+      <trans>Area code</trans>
+    </entry>
+
+
+    <entry>
+      <base>COMPORT</base>
+      <trans>Port</trans>
+    </entry>
+
+    <entry>
+      <base>DESC_COMPORT</base>
+      <trans><![CDATA[
+<hr class="sectionbar" /><h2>Modem</h2>
+  The modem must be connect to server through a serial or USB port.
+]]></trans>
+    </entry>
+
+    <entry>
+      <base>MODE</base>
+      <trans>Mode</trans>
+    </entry>
+
+    <entry>
+      <base>DESC_MODE</base>
+      <trans>Faxes can be sent or received through the same modem selecting "Send and receive". If you select "Receive only" the modem will answer incoming calls and receive faxes, but will not permit to send outbound faxes. Selecting "Send only", the modem will not answer incoming calls, but will send outbound faxes .</trans>
+    </entry>
+
+    <entry>
+      <base>WAITDIALTONE</base>
+      <trans>Wait for dial tone</trans>
+    </entry>
+        <entry>
+      <base>DESC_WAITDIALTONE</base>
+      <trans><![CDATA[
+            <p>
+             Some modems can't recognize a dial tone (especially behind a pbx) and will not dial the number. </br>
+             You can configure the modem to not wait for a dial tone and it will dial the number immediately. We recommend to leave dial tone waiting set to "Enabled", and disable it only in case of problems.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+    
+
+        <entry>
+      <base>DESC_SENDTO</base>
+      <trans><![CDATA[
+		<hr class="sectionbar" /><h2>Formats and notifications</h2>
+            <p>
+                The fax server will forward incoming faxes as an email with an attached fax image. Insert the e-mail address of the receiver or select "Disabled" to disable fax forward by email. </br>
+                Select one or more formats for the attachment. If you prefer to receive only a notification without attachment, unselect all formats.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+    <entry>
+      <base>DISPATCH_FTYPE</base>
+      <trans>Incoming fax format</trans>
+    </entry>
+        <entry>
+      <base>NOTIFY_FTYPE</base>
+      <trans>Sent fax format</trans>
+    </entry>
+        <entry>
+      <base>DESC_NOTIFY_FTYPE</base>
+      <trans><![CDATA[
+            <p>
+	    If the fax client sending the fax asks for a notification, we will send an email with an attachment. <br/>
+            Select one or more formats for the attachment. If you prefer to receive only a notification without attachment, deselect all formats.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+
+    <entry>
+      <base>SAMBAFAX</base>
+      <trans>SambaFax</trans>
+    </entry>
+   
+    
+    <entry>
+      <base>DESC_SAMBAFAX</base>
+      <trans><![CDATA[
+            <p>
+The fax server can enable a local virtual printer, called "sambafax", that will need to be configured on each client, selecting the Apple LaserWriter 16/600 PS. Documents sent to that printer need to contain the word "Numero Fax:" followed by the destination fax number.
+            </p>
+            ]]> 
+      </trans>
+    </entry>
+     <entry>
+      <base>enabled</base>
+      <trans>Enabled</trans>
+    </entry>    
+     <entry>
+      <base>disabled</base>
+      <trans>Disabled</trans>
+    </entry>    
+      <entry>
+      <base>Enabled</base>
+      <trans>Enabled</trans>
+    </entry> 
+     <entry>
+      <base>Disabled</base>
+      <trans>Disabled</trans>
+    </entry>
+     <entry>
+      <base>send</base>
+      <trans>Send only</trans>
+    </entry>
+    <entry>
+      <base>receive</base>
+      <trans>Receive only</trans>
+    </entry>
+    <entry>
+      <base>both</base>
+      <trans>Send and receive</trans>
+    </entry>
+    <entry>
+      <base>NOTIFY</base>
+      <trans>Forward fax notification</trans>
+    </entry>    
+
+    <entry>
+      <base>PBX_PREFIX</base>
+      <trans>PBX prefix</trans>
+    </entry>    
+    <entry>
+      <base>CLIENT_SHOW</base>
+      <trans>Show received fax from client</trans>
+    </entry>
+    <entry>
+      <base>DESC_CLIENT_SHOW</base>
+      <trans><![CDATA[
+<hr class="sectionbar" /><h2>Additional functions</h2>
+Some fax clients allow incoming fax view for everyone. If you need to disable fax viewing to the clients, select "Disabled".
+]]></trans>
+    </entry>    
+    
+    <entry>
+      <base>AUTO_PRINT</base>
+      <trans>Automatically print on</trans>
+    </entry>
+    <entry>
+      <base>DESC_AUTO_PRINT</base>
+      <trans>All incoming faxes can be print on an HP LaserJet compatible printer (PCL5). 
+Select "Disabled" to disabled automatic fax printing.</trans>
+    </entry>    
+    
+    <entry>
+      <base>SENDTO</base>
+      <trans>Forward received fax to</trans>
+    </entry>
+    
+    <entry>
+      <base>DESC_PBX_PREFIX</base>
+      <trans><![CDATA[
+            <p>
+		If the modem is behind a PBX, you could need a dial-out prefix.<br/>
+ 		Leave empty if not behind a PBX.<br/>
+            Insert dial-out prefix
+            </p>
+            ]]> 
+</trans>
+    </entry>    
+    
+    <entry>
+      <base>CONFIG_OK</base>
+      <trans>Faxer server successfully configured.</trans>
+    </entry>
+    <entry>
+      <base>CONFIG_ERROR</base>
+      <trans>Error during server fax configuration. Check /var/log/addmodem.log for details. </trans>
+    </entry>
+    
+</lexicon>
+

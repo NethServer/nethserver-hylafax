@@ -1,0 +1,19 @@
+{
+
+my $sendTo = $hylafax{'SendTo'} || 'FaxMaster';
+if ($sendTo eq 'disabled')
+{
+  $sendTo = '';
+}
+my $fileType = $hylafax{'DispatchFileType'} || '';
+$fileType =~ s/,/\ /g;
+my $notifyMaster = $hylafax{'NotifyMaster'} || 'never';
+my $lang = $hylafax{'Lang'} || 'it_IT';
+
+$OUT.="SENDTO=$sendTo\n";
+$OUT.="FILETYPE=\"$fileType\"\n";
+$OUT.="NOTIFY_FAXMASTER=$notifyMaster\n";
+$OUT.="LANG=$lang\n";
+
+}
+

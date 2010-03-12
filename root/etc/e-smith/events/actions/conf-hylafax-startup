@@ -90,8 +90,5 @@ system("/etc/e-smith/events/actions/navigation-conf");
 # creo il database
 system("/etc/e-smith/events/actions/conf-hylafax-initdb");
 
-# configurazione di base del server
-system("/usr/sbin/neth-faxsetup &> /var/log/faxsetup.log");
-
 exit (0);
 

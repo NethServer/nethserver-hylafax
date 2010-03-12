@@ -33,6 +33,8 @@ for my $event (qw(pre-backup))
 }
 
 
+safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");
+safe_symlink("/var/spool/hylafax/bin/pdf2fax.gs", "root/var/spool/hylafax/bin/pdf2fax");
 #--------------------------------------------------
 # functions for manager panel
 #--------------------------------------------------

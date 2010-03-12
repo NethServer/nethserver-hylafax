@@ -83,7 +83,6 @@ system("/sbin/e-smith/expand-template /var/spool/hylafax/etc/FaxDispatch");
 system("/sbin/e-smith/expand-template /var/spool/hylafax/etc/FaxNotify");
 system("/sbin/e-smith/expand-template /var/qmail/control/badrcptto");
 system("/sbin/e-smith/expand-template /var/qmail/alias/.qmail-sendfax");
-system("/sbin/e-smith/expand-template /etc/hylafax/typerules");
 
 # regenerate server-manager menu
 system("/etc/e-smith/events/actions/navigation-conf");

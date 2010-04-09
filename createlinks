@@ -32,6 +32,11 @@ for my $event (qw(pre-backup))
     event_link("hylafax-backup", $event, "90");
 }
 
+for my $event (qw(hylafax-update))
+{
+    event_link("init-reload", $event, "10");
+}
+
 
 safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");
 safe_symlink("/var/spool/hylafax/bin/pdf2fax.gs", "root/var/spool/hylafax/bin/pdf2fax");

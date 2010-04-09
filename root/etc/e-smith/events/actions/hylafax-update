@@ -55,7 +55,7 @@ system("/sbin/init q") == 0
 # Template SambaFax Printer
 esmith::util::processTemplate (\%conf,'/etc/printcap');
 
-# Restasrt services
+# Restart services
 system( "/sbin/e-smith/service faxq restart >> /var/log/modemconfig.log") == 0
       or die ("Hylafax config : Error occurred during faxq restart. [$!] \n");
 system( "/sbin/e-smith/service hfaxd restart >> /var/log/modemconfig.log") == 0

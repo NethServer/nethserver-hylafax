@@ -24,7 +24,7 @@ faxuser="faxuser"
 faxpass="faxpass"
 faxdb="faxdb"
 totdials=`echo $JOBINFO | cut -d'/' -f4`
-DOCHOME=/home/e-smith/faxweb/docs
+DOCHOME=/home/e-smith/faxw/docs
 
 if [ "$faxstatus" != "" ] || [ "$ENTRYTYPE" == "UNSENT" ]; then
 	state=8;

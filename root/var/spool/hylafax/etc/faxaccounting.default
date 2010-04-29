@@ -140,17 +140,6 @@ case $ENTRYTYPE in
 
 	if [ -f $FILE ]; then
 		cp $FILE $DOCHOME/received/; chmod 777 $DOCHOME/received/$FILENAME.tif
-    		if [ ! -e $DOCHOME/thumb/$FILENAME-15.png ]; then
-        		tifftopnm $FILE >$DOCHOME/tmp/$FILENAME.pnm
-        		pamcut -pad -bottom 600 -left 40 -right 1600 -top 0 $DOCHOME/tmp/$FILENAME.pnm > $DOCHOME/tmp/$FILENAME.cut.pnm
-        		#pnmcut -bottom 600 -left 40 -right 1600 -top 0 $DOCHOME/tmp/$FILENAME.pnm > $DOCHOME/tmp/$FILENAME.cut.pnm
-        		pnmscale 0.5 $DOCHOME/tmp/$FILENAME.cut.pnm > $DOCHOME/tmp/$FILENAME.cut50.pnm
-        		#scrivo il thumbnail ottenuto nella directory thumb
-        		pnmtopng $DOCHOME/tmp/$FILENAME.cut50.pnm >$DOCHOME/thumb/$FILENAME-15.png; chmod 644 $DOCHOME/thumb/$FILENAME-15.png
-        		
-			#cancello i file intermedi
-        		rm -rf $DOCHOME/tmp/$FILENAME*
-    		fi
 	fi
 
 
@@ -192,20 +181,6 @@ case $ENTRYTYPE in
     		fi
 	else
 		logger -t Hylfax "Can't save sent file (jobid: $jobid)"
-	fi
-	
-	if [ ! -f "$DOCHOME/thumb/$doc_id-15.png" ]; then
-   		 if [ -f $DOCHOME$pathsent/$doc_id.tif ]; then #fax mandato da whfc
-       			tifftopnm $DOCHOME$pathsent/$doc_id.tif >$DOCHOME/tmp/$doc_id.pnm
-      			 pamcut -pad -bottom 600 -left 40 -right 1600 -top 0 $DOCHOME/tmp/$doc_id.pnm > $DOCHOME/tmp/$doc_id.cut.pnm
-       			pnmscale 0.5 $DOCHOME/tmp/$doc_id.cut.pnm > $DOCHOME/tmp/$doc_id.cut50.pnm
-		       #scrivo il thumbnail ottenuto nella directory thumb
-     			  pnmtopng $DOCHOME/tmp/$doc_id.cut50.pnm >$DOCHOME/thumb/$doc_id-15.png
-		        chmod go+r $DOCHOME/thumb/$doc_id-15.png
-
-      			 #cancello i file intermedi
-       			rm -rf $DOCHOME/tmp/$doc_id*
-    		fi
 	fi
 	
 ;;

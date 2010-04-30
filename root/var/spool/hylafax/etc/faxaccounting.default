@@ -166,7 +166,7 @@ case $ENTRYTYPE in
 	n=`cat /var/spool/hylafax/docq/seqf`
 	n=$(($n-2))	
 	File=`find /var/spool/hylafax/docq/ -name "doc$n.*"`
-        ext=`echo $File | cut -d '.' -2f`
+        ext=`echo $File | cut -d '.' -f2`
 
 	if [ ! -z $File ] && [ -f $File ]; then  	 #verifico se esiste il file inviato non vuoto
    		if [ ! -f $DOCHOME$pathsent/$doc_id.tif ]; then # verifico che il file non sia gia' stato archiviato

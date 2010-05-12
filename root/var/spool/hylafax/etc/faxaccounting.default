@@ -66,47 +66,23 @@ function findName ()
 
 
 case $ENTRYTYPE in
-"SEND"|"UNSENT")
-	doc_id=$[$jobid + 1000000]
+"UNSENT")
 	FAX_RPATH='/sent'
 	pathsent=$FAX_RPATH
 	fax_type='I'
-	# verifico se nel db esiste gia' => inviato da faxweb o secondo tentativo
-	dbquery "Select count(*) from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
-	result=$ret
 
-	# verifico se m_id e' valorizzato => invio multiplo
-	dbquery "Select rpath from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
-	rpath=$ret
-
-	if [ "$rpath" != "" ]; then 
-		# se e' un invio multiplo il file va su sentm/m_id, altrimenti sendpatch=send
-		pathsent="$rpath"
-	fi
-
-	#formattazione data da 09/25/08 17:31  a 08:09:25 17:31:37
-	year=`echo $data | cut -d' ' -f1  | cut -d'/' -f3`
-	day=`echo $data | cut -d' ' -f1  | cut -d'/' -f2`
-	month=`echo $data |  cut -d' ' -f1  |cut -d'/' -f1`
-	time=`echo $data |  cut -d' ' -f2`
-	data="$year:$month:$day $time:00"
-
+	# Failed fax
+	execquery="update faxweb_fax set state='8' WHERE job_id=$jobid;"
+	#logger -t DEBUG $execquery
+;;
+"SEND")
+	FAX_RPATH='/sent'
+	pathsent=$FAX_RPATH
+	fax_type='I'
 
 	# Campi inutilizzati tts, ktime, rtime
-	if [ $result -eq '0' ]; then
-		findName $number
-		execquery="Insert into faxweb_fax set number='$number', name='$NOME', device='$DEVICE', filename='$doc_id.tif', state='$state', doc_id=$doc_id, date='$data',  job_id='$jobid', com_id='$commid', user='$owner', pages='$totpages', attempts='$totdials', esito='$faxstatus', tipo='H', duration='$JTIME', fax_type='$fax_type', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='image/tiff', status='found'  ;"
-	elif [ $result -eq '1' ]; then
-		#Inviato da web
-		execquery="Update faxweb_fax set state='$state', date='$data', tts='$NEXT', ktime='$killtime', filename='$doc_id.tif', rtime='$retrytime', com_id='$commid', attempts='$totdials', pages='$totpages', esito='$faxstatus', duration='$JTIME',status='found' WHERE job_id=$jobid;"
-	else
-	    error=$result
-	fi
-
-
-
-
-
+	execquery="update faxweb_fax set state='$state', com_id='$commid', device='$DEVICE', pages='$totpages', duration='$JTIME', attempts=attempts+1 WHERE job_id=$jobid;"
+	#logger -t DEBUG $execquery
 ;;
 
 "RECV")
@@ -134,54 +110,61 @@ case $ENTRYTYPE in
 	[ "$CIDNUMBER" == "" ] && CIDNUMBER="$SENDER"
 
 	findName $CIDNUMBER
-
 	execquery="Insert into faxweb_fax set number='$CIDNUMBER', name='$NOME', device='$DEVICE', filename='$FILENAME.tif', data='$DATA', sendto='', msg='', date='$RECEIVED', pages='$PAGES', com_id='$commid', duration='$DURATION', quality='$QUALITY', forward_rcp='', rate='$RATE', errcorr='$ERRCORR', page='$PAGE', fax_type='R', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='image/tiff', status='found', esito=' ' ;"
 
 
 	if [ -f $FILE ]; then
-		cp $FILE $DOCHOME/received/; chmod 777 $DOCHOME/received/$FILENAME.tif
+		cp $FILE $DOCHOME/received/; chmod 666 $DOCHOME/received/$FILENAME.tif
 	fi
 
 
 ;;
 
 "SUBMIT")
-	doc_id=$[$jobid + 1000000]
 	FAX_RPATH='/sent'
 	pathsent=$FAX_RPATH
 	fax_type='I'
-	# verifico se nel db esiste gia' => inviato da faxweb o secondo tentativo
-	dbquery "Select count(*) from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
-	result=$ret
+	#formattazione data da 09/25/08 17:31  a 08:09:25 17:31:37
+	year=`echo $data | cut -d' ' -f1  | cut -d'/' -f3`
+	day=`echo $data | cut -d' ' -f1  | cut -d'/' -f2`
+	month=`echo $data |  cut -d' ' -f1  |cut -d'/' -f1`
+	time=`echo $data |  cut -d' ' -f2`
+	data="$year:$month:$day $time:00"
 
-	# verifico se m_id e' valorizzato => invio multiplo
-	dbquery "Select rpath from faxweb_fax WHERE job_id=$jobid and fax_type='$fax_type';"
-	rpath=$ret
-
-	if [ "$rpath" != "" ]; then 
-		# se e' un invio multiplo il file va su sentm/m_id, altrimenti sendpatch=send
-		pathsent="$rpath"
+	#use company field as id_m
+	id_m=`grep '^company' /var/spool/hylafax/sendq/q$jobid | cut -d':' -f2`
+	if [ ! -z "$id_m" ]; then
+		FAX_RPATH="/sentm/$id_m"
+		pathsent=$FAX_RPATH
 	fi
 
-	n=`cat /var/spool/hylafax/docq/seqf`
-	n=$(($n-2))	
-	File=`find /var/spool/hylafax/docq/ -name "doc$n.*"`
-        ext=`echo $File | cut -d '.' -f2`
 
+	# === Saving file === #
+	File=''
+	File=`grep '^[!]*pdf' /var/spool/hylafax/sendq/q$jobid | cut -d ':' -f4`
+	if [ -z $File ]; then
+		File=`grep '^[!]*tiff' /var/spool/hylafax/sendq/q$jobid | cut -d ':' -f4`
+	fi
+	if [ -z $File ]; then
+		File=`grep '^[!]*postscript' /var/spool/hylafax/sendq/q$jobid | cut -d ':' -f4`
+	fi
+	File_dest=`echo $File | cut -d'.' -f1,2`
+	File_dest=`basename $File_dest`
+	File="/var/spool/hylafax/$File"
+	#logger -t DEBUG "cp $File $DOCHOME$pathsent/$File_dest" 
 	if [ ! -z $File ] && [ -f $File ]; then  	 #verifico se esiste il file inviato non vuoto
-   		if [ ! -f $DOCHOME$pathsent/$doc_id.tif ]; then # verifico che il file non sia gia' stato archiviato
-			case "$ext" in # verifico se e' tif o altro per decidere se copiare o convertire
-			"tif"|"tiff"|"TIF"|"TIFF")
-				cp $File $DOCHOME$pathsent/$doc_id.tif ; chmod 777 $DOCHOME$pathsent/$doc_id.tif 
-				;;
-			*)
-            			gs -q -sDEVICE=tiffg3 -dNOPAUSE -dSAFER=true -sPAPERSIZE=a4 -dFIXEDMEDIA -dBATCH -r209.10\x98 "-sOutputFile=$DOCHOME$pathsent/$doc_id.tif" $File ; chmod 644 $DOCHOME$pathsent/$doc_id.tif
-				;;
-			esac
-    		fi
+		cp $File $DOCHOME$pathsent/$File_dest; chmod 666 $DOCHOME$pathsent/$File_dest
 	else
-		logger -t Hylfax "Can't save sent file (jobid: $jobid)"
+		logger -t Hylfax "Can't save sent file (jobid: $jobid) -> $File"
 	fi
+
+	# === Saving record === #
+
+	file_type=`file -bi $DOCHOME$pathsent/$File_dest`
+	# Campi inutilizzati tts, ktime, rtime
+	findName $number
+	execquery="Insert into faxweb_fax set number='$number', name='$NOME', device='$DEVICE', filename='$File_dest', state='', doc_id=$jobid, date='$data',  job_id='$jobid', com_id='$commid', user='$owner', pages='$totpages', attempts='$totdials',  tipo='H', duration='$JTIME', fax_type='$fax_type', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='$file_type', status='found', id_m='$id_m'  ;"
+	#logger -t DEBUG $execquery
 	
 ;;
 

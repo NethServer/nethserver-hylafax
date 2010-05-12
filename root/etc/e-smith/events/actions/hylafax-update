@@ -28,6 +28,7 @@ our $db = esmith::ConfigDB->open
 
 $mabase = $db->get('hylafax')
    or die("Unable to find Hylafax record in configuration database. \n");
+my $FaxDevice           = $mabase->prop('FaxDevice');
 
 # Template Hylafax config 
 esmith::util::processTemplate (\%conf,"/var/spool/hylafax/etc/config"); 
@@ -43,9 +44,11 @@ esmith::util::processTemplate (\%conf,"/etc/inittab");
 # Template hyla.conf
 esmith::util::processTemplate (\%conf,"/etc/hylafax/hyla.conf");
 
-# execute faxaddmodem
-system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log") == 0
-   or die("Hylafax config: can't add modem. See /var/log/addmodem.log for details. \n");
+# execute faxaddmodem only if not using iaxmodem
+if ($FaxDevice ne 'iax') {
+  system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log") == 0
+     or die("Hylafax config: can't add modem. See /var/log/addmodem.log for details. \n");
+}
 
 # run init q 
 system("/sbin/init q") == 0

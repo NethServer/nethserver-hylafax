@@ -66,7 +66,7 @@ __DATA__
            <field
             type="select"
                         id="FaxDevice"
-                        options="'ttyS0' => 'COM1 (ttyS0)','ttyS1' => 'COM2 (ttyS1)','ttyS2' => 'COM3 (ttyS2)','ttyACM0' => 'USB (ttyACM0)'"
+                        options="'ttyS0' => 'COM1 (ttyS0)','ttyS1' => 'COM2 (ttyS1)','ttyS2' => 'COM3 (ttyS2)','ttyACM0' => 'USB (ttyACM0)','iax' => 'IAX Modem'"
                         value="get_value('FaxDevice')">
                         <label>COMPORT</label>
                         <description>DESC_COMPORT</description>

@@ -9,5 +9,4 @@ ln -sf /var/spool/hylafax/db/faxdb2.sql \
 
 /etc/init.d/mysql.init start
 
-/usr/bin/php /var/spool/hylafax/db/convert.php 
 

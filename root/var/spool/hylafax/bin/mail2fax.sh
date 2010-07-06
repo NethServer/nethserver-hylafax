@@ -34,6 +34,7 @@ cat >> $RANDOMFAX/_message_
 TOLINE=`grep -e "^subject:" -i $RANDOMFAX/_message_ | sed q`
 FROMLINE=`grep -e "^from:" -i $RANDOMFAX/_message_ | sed q`
 TONUMBER=`echo $TOLINE| cut -d':' -f2`
+TONUMBER=`echo $TONUMBER |  tr -d '\015'`
 
 if [ "`echo $FROMLINE | grep '<.*>'`" != "" ]; then
         FROMPATH=`echo $FROMLINE| sed -e 's/.*<\(.*\).*>.*/\1/'`

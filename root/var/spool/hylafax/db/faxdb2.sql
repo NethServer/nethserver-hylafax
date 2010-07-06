@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `faxweb_fax` (
   `sendto` varchar(40) default NULL,
   `msg` varchar(240) default NULL,
   `com_id` int(11) default '0',
-  `date` varchar(20) default '0000/00/00 00:00:00',
+  `date` datetime NOT NULL,
   `pages` int(11) default '0',
   `duration` varchar(10) default '0',
   `quality` varchar(20) default '0',
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `faxweb_fax` (
   `deleted` char(1) default '0',
   PRIMARY KEY  (`id`),
   FULLTEXT KEY `name` (`name`,`number`,`description`,`filename`),
-  FULLTEXT KEY `name_2` (`name`,`number`,`description`,`date`)
+  FULLTEXT KEY `name_2` (`name`,`number`,`description`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 

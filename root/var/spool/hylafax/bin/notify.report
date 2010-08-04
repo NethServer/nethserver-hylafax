@@ -347,7 +347,7 @@ notify_mail()
     echo "Content-Transfer-Encoding: $ENCODING"                                                                                                                   
     echo "Content-Disposition: attachment; filename=\"report.pdf\""                                                                                               
     echo ""                                                                                                                                                       
-    putPdfEncodedImage "/var/spool/hylafax/tmp/report.pdf" "$FROMFMT"                                                                                             
+    putPdfEncodedImage "/var/spool/hylafax/tmp/report.pdf" "PDF"                                                                                             
     
     # put out a terminating MIME boundary
     echo ""

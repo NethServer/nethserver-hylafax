@@ -131,8 +131,8 @@ case $ENTRYTYPE in
 	time=`echo $data |  cut -d' ' -f2`
 	data="$year:$month:$day $time:00"
 
-	#use company field as id_m
-	id_m=`grep '^company' /var/spool/hylafax/sendq/q$jobid | cut -d':' -f2`
+	#use jobtag field as id_m
+	id_m=`grep '^jobtag' /var/spool/hylafax/sendq/q$jobid | cut -d':' -f2`
 	if [ ! -z "$id_m" ]; then
 		FAX_RPATH="/sentm/$id_m"
 		pathsent=$FAX_RPATH

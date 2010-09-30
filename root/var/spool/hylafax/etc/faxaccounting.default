@@ -53,7 +53,7 @@ function findName ()
         nome_sender_vti=$(mysql -s -u vtigerpub -pvtpass -nB -D vtigerdb -e "Select accountname from vtiger_account WHERE fax like '$1%' limit 1;")
     fi
     if [ -e "/usr/share/phonebooks" ] ; then
-        nome_sender_cust=$(mysql -s -u pbookuser -ppbookpass -nB -D ext_phonebook -e "Select concat(azienda,' ',nome) as nome from rubrica WHERE fax like '$1%' limit 1;")
+        nome_sender_cust=$(mysql -s -u pbookuser -ppbookpass -nB -D phonebook -e "Select concat(company,' ',name) as nome from phonebook WHERE fax like '$1%' limit 1;")
     fi
 
     NOME=''

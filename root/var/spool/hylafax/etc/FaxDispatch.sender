@@ -1,0 +1,21 @@
+function setSender ()
+{
+    tmp=""
+    if [ -e "/home/httpd/html/horde/kronolith" ] ; then
+        tmp=$(mysql -s -u hordepub -phpass -nB -D horde -e "Select object_name from turba_objects_pub WHERE object_fax like '$1%' or fax like '$2%' limit 1;")
+    fi
+    if [ -e "/var/www/html/vtiger" ] ; then
+        tmp=$(mysql -s -u vtigerpub -pvtpass -nB -D vtigerdb -e "Select accountname from vtiger_account WHERE fax like '$1%' or fax like '$2%' limit 1;")
+    fi
+    if [ -e "/usr/share/phonebooks" ] ; then
+        tmp=$(mysql -s -u pbookuser -ppbookpass -nB -D phonebook -e "Select concat(company,' ',name) as nome from phonebook WHERE fax like '$1%' or fax like '$2%' limit 1;")
+    fi
+
+    if [ "$tmp" != "" ]; then
+     tmp="`echo "$tmp" | sed 's/\W/ /g' `"
+     SENDER=$tmp
+    fi
+}
+
+setSender $CIDNUMBER $CALLID1
+

@@ -1,0 +1,8 @@
+{
+   my $resolve = $hylafax{'ResolveSender'} || 'disabled';
+   if ($resolve eq 'enabled')
+   {
+     $OUT.="#enable sender name resolution for email subject\n";
+     $OUT.=". /var/spool/hylafax/etc/FaxDispatch.sender\n";
+   }
+}

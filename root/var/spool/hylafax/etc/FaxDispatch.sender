@@ -1,5 +1,9 @@
 function setSender ()
 {
+    if [ "x$1" == "x" ] && [ "x$2" == "x" ]; then
+      return
+    fi
+
     tmp=""
     if [ -e "/home/httpd/html/horde/kronolith" ] ; then
         tmp=$(mysql -s -u hordepub -phpass -nB -D horde -e "Select object_name from turba_objects_pub WHERE object_fax like '$1%' or fax like '$2%' limit 1;")

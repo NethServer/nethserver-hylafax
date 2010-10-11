@@ -44,6 +44,10 @@ function dbquery ()
 
 function findName ()
 {
+   if [ "x$1" == "x" ]; then
+    return
+   fi
+
     dbquery "Select nome from faxweb_association WHERE fax like '$1%' limit 1;"
     nome_sender_ass=$ret
     if [ -e "/home/httpd/html/horde/kronolith" ] ; then

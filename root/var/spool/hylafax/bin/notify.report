@@ -697,3 +697,4 @@ if [ "$NOTIFY_FAXMASTER" = "yes" ]; then
     RETURNTECHINFO=$origRETURNTECHINFO
     RETURNFILETYPE=$origRETURNFILETYPE
 fi
+rm -rf /var/spool/hylafax/tmp/report$jobid.* 2> /dev/null

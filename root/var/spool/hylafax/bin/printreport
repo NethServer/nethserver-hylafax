@@ -9,7 +9,7 @@ ENSCRIPT_PARAMS="-l -L 69 -s 1 -M A4 -e "
 if [ $# -eq 1 ]; then
   outFile=$1
 else
-  outFile="tmp/report"
+  outFile="tmp/report$jobid"
 fi
 
 #Convert source to pdf file

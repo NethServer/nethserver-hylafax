@@ -346,8 +346,8 @@ notify_mail()
     echo "Content-Description: Report"                                                                                                                            
     echo "Content-Transfer-Encoding: $ENCODING"                                                                                                                   
     echo "Content-Disposition: attachment; filename=\"report.pdf\""                                                                                               
-    echo ""                                                                                                                                                       
-    putPdfEncodedImage "/var/spool/hylafax/tmp/report.pdf" "PDF"                                                                                             
+    echo ""         
+    putPdfEncodedImage "/var/spool/hylafax/tmp/report$jobid.pdf" "PDF"                                                                                             
     
     # put out a terminating MIME boundary
     echo ""

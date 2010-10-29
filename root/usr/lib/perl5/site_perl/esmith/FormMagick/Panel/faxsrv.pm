@@ -191,12 +191,20 @@ sub change_modem_settings {
     my $not = join(',', $q->param('NotifyFileType'));
     $mabase->set_prop('NotifyFileType', $not);
     
- 
-    # Update config
-    if (system( "/etc/e-smith/events/actions/hylafax-update" ) == 0) {
-       $self->success($self->localise("CONFIG_OK"));
+    # no modem probe if no FaxDevice configured
+    if($q->param('FaxDevice') eq 'none') {
+       if (system( "/sbin/e-smith/signal-event hylafax-update" ) == 0) {
+          $self->success($self->localise("CONFIG_OK"));
+       } else {
+          $self->error($self->localise("CONFIG_ERROR"));
+       }
     } else {
-       $self->error($self->localise("CONFIG_ERROR"));
+       # Update config and probe for modem
+       if (system( "/etc/e-smith/events/actions/hylafax-update" ) == 0) {
+          $self->success($self->localise("CONFIG_OK"));
+       } else {
+          $self->error($self->localise("CONFIG_ERROR"));
+       }
     } 
     $self->wherenext("First");
 }
@@ -265,6 +273,20 @@ sub list_accounts {
         }
     }
     return(\%existingAccounts);
+}
+
+
+sub get_faxdevice_options
+{
+    my %options= ( 'ttyS0' => 'COM1 (ttyS0)','ttyS1' => 'COM2 (ttyS1)','ttyS2' => 'COM3 (ttyS2)','ttyACM0' => 'USB (ttyACM0)','iax' => 'IAX Modem', 'none' => 'Nessuno' );
+
+    my $fd = $db->get_prop('hylafax', 'FaxDevice') || 'none';
+    if(! exists $options{$fd} )
+    {
+       $options{$fd} = $fd;
+    }
+
+    \%options;
 }
 
 

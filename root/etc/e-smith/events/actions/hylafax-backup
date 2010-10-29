@@ -4,11 +4,23 @@ if [ ! -d /home/e-smith/hylafax ]; then
         mkdir -p /home/e-smith/hylafax
 fi
 
-cp -pr /var/spool/hylafax/recvq /home/e-smith/hylafax/
-cp -pr /var/spool/hylafax/doneq /home/e-smith/hylafax/
-cp -pr /var/spool/hylafax/docq /home/e-smith/hylafax/
-cp -pr /var/spool/hylafax/log /home/e-smith/hylafax/
-cp -pr /var/spool/hylafax/sendq /home/e-smith/hylafax/
-cp -pr /var/spool/hylafax/log /home/e-smith/hylafax/
-cp -pr /var/spool/hylafax/info /home/e-smith/hylafax/
-cp -pr /var/spool/hylafax/etc /home/e-smith/hylafax/
+# remove all unwanted files (clean backup from older releases)
+rm -rf /home/e-smith/hylafax/log
+rm -rf /home/e-smith/hylafax/sendq
+rm -rf /home/e-smith/hylafax/docq
+rm -rf /home/e-smith/hylafax/doneq #present only in old releases
+
+# re-create directories
+mkdir -p /home/e-smith/hylafax/log
+mkdir -p /home/e-smith/hylafax/sendq
+mkdir -p /home/e-smith/hylafax/docq
+
+# save all seqf
+cp -p /var/spool/hylafax/log/seqf /home/e-smith/hylafax/log/
+cp -p /var/spool/hylafax/sendq/seqf /home/e-smith/hylafax/sendq/
+cp -p /var/spool/hylafax/docq/seqf /home/e-smith/hylafax/docq/
+
+# rsynch big directories
+rsync -a --delete /var/spool/hylafax/recvq /home/e-smith/hylafax/recvq
+rsync -a --delete /var/spool/hylafax/etc /home/e-smith/hylafax/etc
+rsync -a --delete /var/spool/hylafax/info /home/e-smith/hylafax/info

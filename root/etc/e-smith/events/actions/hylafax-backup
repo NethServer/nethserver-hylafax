@@ -16,9 +16,9 @@ mkdir -p /home/e-smith/hylafax/sendq
 mkdir -p /home/e-smith/hylafax/docq
 
 # save all seqf
-cp -p /var/spool/hylafax/log/seqf /home/e-smith/hylafax/log/
-cp -p /var/spool/hylafax/sendq/seqf /home/e-smith/hylafax/sendq/
-cp -p /var/spool/hylafax/docq/seqf /home/e-smith/hylafax/docq/
+/bin/cp -p /var/spool/hylafax/log/seqf /home/e-smith/hylafax/log/
+/bin/cp -p /var/spool/hylafax/sendq/seqf /home/e-smith/hylafax/sendq/
+/bin/cp -p /var/spool/hylafax/docq/seqf /home/e-smith/hylafax/docq/
 
 # rsynch big directories
 rsync -a --delete /var/spool/hylafax/recvq /home/e-smith/hylafax/recvq

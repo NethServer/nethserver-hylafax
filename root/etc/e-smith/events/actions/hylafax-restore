@@ -1,6 +1,6 @@
 #!/bin/bash
 
 if [ -d /home/e-smith/hylafax/ ]; then
-   cp -pr /home/e-smith/hylafax/* /var/spool/hylafax/
+   /bin/cp -pr /home/e-smith/hylafax/* /var/spool/hylafax/
 fi
 

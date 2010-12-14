@@ -111,7 +111,7 @@ case $ENTRYTYPE in
 	SENDER="`$INFO $FILE | $AWK -F: '/Sender/ { print $2 }' 2>$ERRORSTO | $SED 's/^.//'`"
 	SENDER="`echo "$SENDER" | sed 's/ //g' `"
 
-	[ "$CIDNUMBER" == "" ] && CIDNUMBER="$SENDER"
+	[ "$CIDNUMBER" == "" -o "$CIDNUMBER" == "anonymous" ] && CIDNUMBER="$SENDER"
 
 	findName $CIDNUMBER
 	execquery="Insert into faxweb_fax set number='$CIDNUMBER', name='$NOME', device='$DEVICE', filename='$FILENAME.tif', data='$DATA', sendto='', msg='', date='$RECEIVED', pages='$PAGES', com_id='$commid', duration='$DURATION', quality='$QUALITY', forward_rcp='', rate='$RATE', errcorr='$ERRCORR', page='$PAGE', fax_type='R', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='image/tiff', status='found', esito=' ' ;"

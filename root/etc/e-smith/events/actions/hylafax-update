@@ -48,6 +48,8 @@ esmith::util::processTemplate (\%conf,"/etc/hylafax/hyla.conf");
 if ($FaxDevice ne 'iax') {
   system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log") == 0
      or die("Hylafax config: can't add modem. See /var/log/addmodem.log for details. \n");
+} else {
+  system("/etc/rc.d/init.d/iaxmodem restart");
 }
 
 # run init q 

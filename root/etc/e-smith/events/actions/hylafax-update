@@ -57,8 +57,6 @@ system("/sbin/init q") == 0
 
 # Template SambaFax Printer
 esmith::util::processTemplate (\%conf,'/etc/printcap');
-system("/usr/sbin/checkpc -f >/dev/null") == 0
-    or die("Error during checkpc. \n");
 
 # Restart services
 system( "/sbin/e-smith/service faxq restart >> /var/log/modemconfig.log") == 0

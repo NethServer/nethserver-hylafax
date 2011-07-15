@@ -31,7 +31,7 @@
         <trans><![CDATA[
             <p>
              Fax sender is usually printed on top (first line) by the receiving fax machine. <br/>
-             You can enter a fax number or a name, at most 20 chars long (we recommend using the company name).
+             You can enter a fax number or a name, at most 20 chars long (we recommend using the company name). Use only alphanumeric characters.
             </p>
             ]]></trans>
     </entry>

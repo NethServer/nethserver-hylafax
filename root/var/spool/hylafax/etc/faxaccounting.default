@@ -162,7 +162,7 @@ case $ENTRYTYPE in
 	File="/var/spool/hylafax/$File"
 	#logger -t DEBUG "cp $File $DOCHOME$pathsent/$File_dest" 
 	if [ ! -z $File ] && [ -f $File ]; then  	 #verifico se esiste il file inviato non vuoto
-		cp $File $DOCHOME$pathsent/$File_dest; chmod 666 $DOCHOME$pathsent/$File_dest
+                cp "$File" "$DOCHOME$pathsent/$File_dest" && chmod 666 "$DOCHOME$pathsent/$File_dest"
 	else
 		logger -t Hylfax "Can't save sent file (jobid: $jobid) -> $File"
 	fi

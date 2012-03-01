@@ -212,15 +212,12 @@ sub change_modem_settings {
 # Based on a work of Robert van den Aker
 sub parse_printers()
 {
-    my $printersconf = "/etc/cups/printers.conf";
     my %printers;
-    open (PRINTERSCONF, "<$printersconf");
-    while (<PRINTERSCONF>) {
-        chomp;
-        /^<(Default)?Printer ([a-z][a-z0-9]*)>$/;
-	if($2) { $printers{$2}=$2; }
+    my @lines = `/usr/bin/lpstat -a`;
+    foreach (@lines) {
+        my @fields=split(' ',$_);
+        $printers{$fields[0]}=$fields[0];
     }
-    close (PRINTERSCONF);
     return %printers;
 }
 

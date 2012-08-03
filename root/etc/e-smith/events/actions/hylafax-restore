@@ -2,5 +2,8 @@
 
 if [ -d /home/e-smith/hylafax/ ]; then
    /bin/cp -pr /home/e-smith/hylafax/* /var/spool/hylafax/
+   chown -R uucp:uucp /var/spool/hylafax/log/
+   chown -R uucp:uucp /var/spool/hylafax/sendq/
+   chown -R uucp:uucp /var/spool/hylafax/docq/
 fi
 

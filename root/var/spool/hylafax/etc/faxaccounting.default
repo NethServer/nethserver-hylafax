@@ -156,7 +156,7 @@ case $ENTRYTYPE in
 	File_dest=`basename $File_dest`
 	File="/var/spool/hylafax/$File"
 	#logger -t DEBUG "cp $File $DOCHOME$pathsent/$File_dest" 
-	if [ ! -z $File ] && [ -f $File ]; then  	 #verifico se esiste il file inviato non vuoto
+        if [ ! -z $File ] && [ -f $File ] && [ ! -f "$DOCHOME$pathsent/$File_dest" ]; then       #verifico se esiste il file inviato non vuoto
 		cp $File "$DOCHOME$pathsent/$File_dest" && chmod 666 "$DOCHOME$pathsent/$File_dest"
 	else
 		logger -t Hylfax "Can't save sent file (jobid: $jobid) -> $File"
@@ -167,7 +167,7 @@ case $ENTRYTYPE in
 	file_type=`file -bi $DOCHOME$pathsent/$File_dest`
 	# Campi inutilizzati tts, ktime, rtime
 	findName $number
-	execquery="Insert into faxweb_fax set number='$number', name='$NOME', device='$DEVICE', filename='$File_dest', state='', doc_id=$jobid, date='$data',  job_id='$jobid', com_id='$commid', user='$owner', pages='$totpages', attempts='$totdials',  tipo='H', duration='$JTIME', fax_type='$fax_type', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='$file_type', status='found', id_m='$id_m'  ;"
+	execquery="Insert delayed into faxweb_fax set number='$number', name='$NOME', device='$DEVICE', filename='$File_dest', state='', doc_id=$jobid, date='$data',  job_id='$jobid', com_id='$commid', user='$owner', pages='$totpages', attempts='$totdials',  tipo='H', duration='$JTIME', fax_type='$fax_type', path='$DOCHOME$FAX_RPATH', rpath='$FAX_RPATH', type='$file_type', status='found', id_m='$id_m'  ;"
 	#logger -t DEBUG $execquery
 	
 ;;

@@ -35,7 +35,6 @@ for my $event (qw(pre-backup))
 for my $event (qw(hylafax-update))
 {
     event_link("init-reload", $event, "10");
-    event_link("checkpc", $event, "20");
 }
 
 

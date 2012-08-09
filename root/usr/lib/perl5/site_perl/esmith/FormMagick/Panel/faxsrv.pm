@@ -209,38 +209,23 @@ sub change_modem_settings {
     $self->wherenext("First");
 }
 
-sub parse_printcap {
-        my $file = '/etc/printcap';
-        my %printers;
-
-        open F,$file or return;
-        while (<F>) {
-                chomp;
-                s/#.*$//;  s/\s+$//;  s/^\s+//;
-                next unless $_;
-                next if /^:/;
-                next if /^\|/;
-                next if /^all:/;
-                if (/^include (.*)/) {
-                        print "c";
-                        parse_printcap($_);
-                        next;
-                }
-                s/:.*$//;  s/\|.*$//;
-		# exclude sambafax printcap entry
-                if($_ ne 'sambafax') { 
-			$printers{$_}=$_;
-		}
-        }
-        close F;
-        return %printers;
+# Based on a work of Robert van den Aker
+sub parse_printers()
+{
+    my %printers;
+    my @lines = `/usr/bin/lpstat -a`;
+    foreach (@lines) {
+        my @fields=split(' ',$_);
+        $printers{$fields[0]}=$fields[0];
+    }
+    return %printers;
 }
 
 
 sub list_printers {
     my $self = shift;
     my $q = $self->{cgi};
-    my %printer_opts = parse_printcap();  
+    my %printer_opts = parse_printers();  
     $printer_opts{'disabled'}='Disabled';
     return \%printer_opts;
 }
@@ -278,7 +263,7 @@ sub list_accounts {
 
 sub get_faxdevice_options
 {
-    my %options= ( 'ttyS0' => 'COM1 (ttyS0)','ttyS1' => 'COM2 (ttyS1)','ttyS2' => 'COM3 (ttyS2)','ttyACM0' => 'USB (ttyACM0)','iax' => 'IAX Modem', 'none' => 'Nessuno' );
+    my %options= ( 'ttyS0' => 'COM1 (ttyS0)','ttyS1' => 'COM2 (ttyS1)','ttyS2' => 'COM3 (ttyS2)','ttyUSB0' => 'USB to Serial','ttyACM0' => 'USB (ttyACM0)','iax' => 'IAX Modem', 'none' => 'Nessuno' );
 
     my $fd = $db->get_prop('hylafax', 'FaxDevice') || 'none';
     if(! exists $options{$fd} )

@@ -245,7 +245,7 @@ sub GetEmailFromDoc {
 sub TrySending {
   for ( my $i=0; $i<@faxdest; $i++ ) {  # for every found faxnumber
                                         # compile a commandline
-    my $fc = $SENDFAX . " -n -D -f " . $mailaddress . " -o " . $lpuser . " -d " . $faxdest[$i] . " " . $PSFILE ;
+    my $fc = $SENDFAX . " -n -D -f " . $mailaddress . " -d " . $faxdest[$i] . " " . $PSFILE ;
     system $fc if not $DEBUG;           # and execute it
     Log($fc);                           # and log it
   }

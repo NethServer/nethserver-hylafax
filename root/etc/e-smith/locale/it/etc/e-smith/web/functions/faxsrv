@@ -32,7 +32,8 @@
         <trans><![CDATA[
             <p>
 	     Il mittente fax viene generalmente stampato dal fax ricevente nella prima riga del fax, in alto. <br/> 
-	     E' possibile inserire il numero di fax oppure un nome di lughezza massima pari a 20 caratteri (consigliato il nome dell'azienda). 
+	     E' possibile inserire il numero di fax oppure un nome di lughezza massima pari a 20 caratteri (consigliato il nome dell'azienda).
+	     Sono consentiti solo caratteri alfanumerici. 
             </p>
             ]]></trans>
     </entry>

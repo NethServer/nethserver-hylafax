@@ -48,6 +48,8 @@ esmith::util::processTemplate (\%conf,"/etc/hylafax/hyla.conf");
 if ($FaxDevice ne 'iax') {
   system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log") == 0
      or die("Hylafax config: can't add modem. See /var/log/addmodem.log for details. \n");
+} else {
+  system("/etc/rc.d/init.d/iaxmodem restart");
 }
 
 # run init q 
@@ -55,18 +57,24 @@ system("/sbin/init q") == 0
     or die("Hylafax config : error during init cmd. \n");
 
 
-# Template SambaFax Printer
-esmith::util::processTemplate (\%conf,'/etc/printcap');
-system("/usr/sbin/checkpc -f >/dev/null") == 0
-    or die("Error during checkpc. \n");
+my $SambaFax = $mabase->prop('SambaFax');
+if($SambaFax eq "enabled")
+{
+    my $SambaFaxName = $mabase->prop('SambaFaxName');
+    system("/usr/sbin/lpadmin  -p '$SambaFaxName' -P /usr/share/cups/model/postscript.ppd.gz  -v 'salsafax:/' -E");
+}
+else 
+{
+    system("/usr/sbin/lpadmin -x sambafax > /dev/null");
+}
 
 # Restart services
 system( "/sbin/e-smith/service faxq restart >> /var/log/modemconfig.log") == 0
       or die ("Hylafax config : Error occurred during faxq restart. [$!] \n");
 system( "/sbin/e-smith/service hfaxd restart >> /var/log/modemconfig.log") == 0
       or die ("Hylafax config : Error occurred during hfaxd restart. [$!] \n");
-system( "/sbin/e-smith/service lpd restart >> /var/log/modemconfig.log") == 0
-      or die ("Hylafax config : Error occurred during LPD restart. [$!] \n");
+system( "/sbin/e-smith/service cups restart >> /var/log/modemconfig.log") == 0
+      or die ("Hylafax config : Error occurred during CUPS restart. [$!] \n");
 system( "/sbin/e-smith/service smb restart >> /var/log/modemconfig.log") == 0
       or die ("Hylafax config : Error occurred during SMBD restart. [$!] \n");
 

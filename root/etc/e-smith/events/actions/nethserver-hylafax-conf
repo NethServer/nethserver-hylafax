@@ -29,6 +29,7 @@ NethServer::Service::manage_add('nethserver-hylafax', 'hylafax');
 
 my $luseradd = '/usr/sbin/luseradd';
 my $accountsDb = esmith::AccountsDB->open() or die("Could not open AccountsDB");
+my $exitCode = 0;
 
 my $entries = {
     faxmanager => {
@@ -112,3 +113,4 @@ if ($fmaster eq 'false') {
 }
 
 
+return $exitCode;

@@ -1,9 +1,0 @@
-{
-   $OUT .= "sendfax\n";
-   $OUT .= "sendfax\@$DomainName\n";
-   foreach my $domain ( keys %Domains )
-   {
-      next unless $Domains{$domain}{type} eq "domain";
-      $OUT .= "sendfax\@$domain\n";
-   }
-}

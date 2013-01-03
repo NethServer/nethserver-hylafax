@@ -4,22 +4,6 @@ use esmith::Build::CreateLinks qw(:all);
 use File::Basename;
 use File::Path;
 
-templates2events("/var/spool/hylafax/etc/hosts.hfaxd",
-			qw(
-				bootstrap-console-save
-				post-upgrade
-				network-create
-				network-delete
-			));
-
-service_link_enhanced('faxq', 'S95', '7');
-service_link_enhanced('hfaxd', 'S96', '7');
-
-safe_symlink("/var/service/faxq", "root/service/faxq");
-safe_symlink("/var/service/hfaxd", "root/service/hfaxd");
-
-safe_symlink("../daemontools", "root/etc/rc.d/init.d/supervise/hfaxd");
-
 foreach (qw(FaxNotify FaxAccounting FaxDispatch))
 {
     safe_symlink("/etc/e-smith/templates-default/template-begin-shell",
@@ -27,23 +11,65 @@ foreach (qw(FaxNotify FaxAccounting FaxDispatch))
 }
 
 
-for my $event (qw(pre-backup))
-{
-    event_link("hylafax-backup", $event, "90");
-}
-
-for my $event (qw(hylafax-update))
-{
-    event_link("init-reload", $event, "10");
-}
-
-
 safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");
 safe_symlink("/var/spool/hylafax/bin/pdf2fax.gs", "root/var/spool/hylafax/bin/pdf2fax");
-#--------------------------------------------------
-# functions for manager panel
-#--------------------------------------------------
-my $panel = "manager";
 
-panel_link("faxsrv", $panel);
+
+# Expand hosts.hfaxd
+
+templates2events("/var/spool/hylafax/etc/hosts.hfaxd",
+			qw(
+				interface-update
+				network-create
+				network-delete
+			));
+
+
+#--------------------------------------------------
+# actions for nethserver-hylafax-update event
+#--------------------------------------------------
+
+my $event = "nethserver-hylafax-update";
+
+event_actions($event,
+              'initialize-default-databases' => '00',
+              'nethserver-hylafax-conf' => '02',
+#              'init-reload' => 10,
+              'firewall-adjust' => '30',
+              'runlevel-adjust' => '40');
+
+templates2events("/var/spool/hylafax/etc/config",$event);
+templates2events("/var/spool/hylafax/etc/FaxAccounting",$event);
+templates2events("/var/spool/hylafax/etc/hosts.hfaxd",$event);
+templates2events("/var/spool/hylafax/etc/FaxDispatch",$event);
+templates2events("/var/spool/hylafax/etc/FaxNotify",$event);
+templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
+templates2events("/etc/hylafax/hyla.conf",$event);
+
+event_services($event, 'hylafax' => 'restart');
+
+
+#--------------------------------------------------
+# actions for nethserver-hylafax-save event
+#--------------------------------------------------
+
+$event = "nethserver-hylafax-save";
+
+event_services($event, 'ejabberd' => 'restart');
+event_services($event, 'httpd' => 'reload');
+#templates2events("/etc/ejabberd/ejabberd.cfg",  $event);
+
+#--------------------------------------------------
+# actions for nethserver-hylafax-uninstall event
+#--------------------------------------------------
+
+$event = "nethserver-hylafax-uninstall";
+
+event_actions($event,
+              'nethserver-ejabberd-uninstall' => '02',
+              'firewall-adjust' => '40',
+              'runlevel-adjust' => '50');
+
+templates2events("/etc/ejabberd/ejabberd.cfg",  $event);
+
 

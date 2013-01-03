@@ -1,0 +1,74 @@
+Summary: NethServer module to configure hylafax+
+Name: name nethserver-hylafax
+Version: @@VERSION@@
+Release: @@RELEASE@@%{?dist}
+License: GPL
+Group: Networking/Daemons
+Source: %{name}-%{version}.tar.gz
+Packager: Giacomo Sanchietti <giacomo.sanchietti@nethesis.it>
+BuildArch: noarch
+Requires: hylafax >= hylafax-5.5.0, urw-fonts, perl-Mail-Sendmail, enscript
+Requires: cups
+BuildRequires: nethserver-devtools
+AutoReq: no
+
+%description
+NethServer module to configure hylafax+
+
+
+%prep
+%setup
+
+%pre
+
+%post
+/etc/e-smith/events/actions/conf-hylafax-startup
+
+%preun
+
+%postun
+
+%build
+perl createlinks
+cd root;
+mkdir -p var/lib/nethserver/fax
+mkdir -p var/lib/nethserver/fax/docs
+mkdir -p var/lib/nethserver/fax/docs/thumb
+mkdir -p var/lib/nethserver/fax/docs/sent
+mkdir -p var/lib/nethserver/fax/docs/tmp
+mkdir -p var/lib/nethserver/fax/docs/sentm
+mkdir -p var/lib/nethserver/fax/docs/received
+
+%install
+/bin/rm -rf $RPM_BUILD_ROOT
+(cd root   ; /usr/bin/find . -depth -print | /bin/cpio -dump $RPM_BUILD_ROOT)
+/bin/rm -f %{name}-%{version}-filelist
+
+/sbin/e-smith/genfilelist \
+    --dir /var/lib/nethserver/fax/docs/ 'attr(0775,uucp,www)' \
+    --dir /var/lib/nethserver/fax/docs/thumb 'attr(0775,uucp,www)' \
+    --dir /var/lib/nethserver/fax/docs/tmp 'attr(0775,uucp,www)' \
+    --dir /var/lib/nethserver/fax/docs/received 'attr(0775,uucp,www)' \
+    --dir /var/lib/nethserver/fax/docs/sentm 'attr(0775,uucp,www)' \
+    --dir /var/lib/nethserver/fax/docs/sent 'attr(0775,uucp,www)' \
+    --file /usr/sbin/neth-addmodem 'attr(0755,root,root)' \
+    --file /usr/sbin/neth-faxsetup 'attr(0755,root,root)' \
+    --file /var/spool/hylafax/bin/mail2fax.sh 'attr(0755,root,root)' \
+    --file /var/spool/hylafax/bin/notify.report 'attr(0755,root,root)' \
+    --file /usr/local/bin/salsafax 'attr(0755,root,root)' \
+    --file /etc/e-smith/events/actions/conf-hylafax-initdb 'attr(0755,root,root)' \
+    --file /etc/e-smith/events/actions/conf-hylafax-startup 'attr(0755,root,root)' \
+    --file /etc/e-smith/events/actions/checkpc 'attr(0755,root,root)' \
+    --file /etc/rc.d/init.d/supervise/faxq 'attr(0755,root,root)' \
+    --ignoredir /var/spool/hylafax/etc \
+    --ignoredir /var/spool/hylafax \
+    --file /var/spool/hylafax/etc/setup.cache 'attr(0644,uucp,uucp)' \
+    $RPM_BUILD_ROOT > %{name}-%{version}-%{release}-filelist
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files -f %{name}-%{version}-%{release}-filelist
+%defattr(0644,root,root)
+
+%changelog

@@ -103,9 +103,9 @@ my %fprops = (
     'type', 'pseudonym', 'Account', 'admin'
 );
 
-my $fmaster = $a->get('faxmaster') || 'false';
+my $fmaster = $accountsDb->get('faxmaster') || 'false';
 if ($fmaster eq 'false') {
-	$a->new_record( 'faxmaster', \%fprops );
+	$accountsDb->new_record( 'faxmaster', \%fprops );
 	my $msg =
     	  system( "/sbin/e-smith/signal-event", "pseudonym-create" )
             ? 'CREATE_ERROR'
@@ -113,4 +113,4 @@ if ($fmaster eq 'false') {
 }
 
 
-return $exitCode;
+exit($exitCode);

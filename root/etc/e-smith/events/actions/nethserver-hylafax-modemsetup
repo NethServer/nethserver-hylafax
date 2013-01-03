@@ -23,7 +23,7 @@ package esmith;
 
 use strict;
 use Errno;
-use File::Basename:
+use File::Basename;
 use esmith::config;
 use esmith::util;
 use esmith::db;
@@ -41,13 +41,13 @@ my $FaxDevice           = $mabase->prop('FaxDevice');
 
 # execute faxaddmodem only if not using iaxmodem
 if ($FaxDevice ne 'iax') {
-  system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log") == 0
+  system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log");
 }
 
 
 # stop all faxgetty-* services and remove relative files
-my @files = </etc/event.d/faxgetty-*>
-foreach $file (@files) {
+my @files = </etc/event.d/faxgetty-*>;
+foreach my $file (@files) {
    system("/sbin/stop ".basename($file));
    unlink($file);
 } 
@@ -67,6 +67,7 @@ stop on runlevel 6
 respawn
 exec /usr/sbin/faxgetty $FaxDevice
 END
+;
 
 open (FILE, ">>$upstart_file"); 
 print FILE $doc; 

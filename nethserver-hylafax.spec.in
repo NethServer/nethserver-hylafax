@@ -34,12 +34,8 @@ signal_event  %{name}-uninstall $1
 %build
 perl createlinks
 cd root;
-mkdir -p var/lib/nethserver/fax
-mkdir -p var/lib/nethserver/fax/docs
-mkdir -p var/lib/nethserver/fax/docs/thumb
+mkdir -p var/spool/hylafax/notify
 mkdir -p var/lib/nethserver/fax/docs/sent
-mkdir -p var/lib/nethserver/fax/docs/tmp
-mkdir -p var/lib/nethserver/fax/docs/sentm
 mkdir -p var/lib/nethserver/fax/docs/received
 
 %install
@@ -49,10 +45,7 @@ mkdir -p var/lib/nethserver/fax/docs/received
 
 /sbin/e-smith/genfilelist \
     --dir /var/lib/nethserver/fax/docs/ 'attr(0775,uucp,www)' \
-    --dir /var/lib/nethserver/fax/docs/thumb 'attr(0775,uucp,www)' \
-    --dir /var/lib/nethserver/fax/docs/tmp 'attr(0775,uucp,www)' \
     --dir /var/lib/nethserver/fax/docs/received 'attr(0775,uucp,www)' \
-    --dir /var/lib/nethserver/fax/docs/sentm 'attr(0775,uucp,www)' \
     --dir /var/lib/nethserver/fax/docs/sent 'attr(0775,uucp,www)' \
     --file /usr/sbin/neth-addmodem 'attr(0755,root,root)' \
     --file /usr/sbin/neth-faxsetup 'attr(0755,root,root)' \

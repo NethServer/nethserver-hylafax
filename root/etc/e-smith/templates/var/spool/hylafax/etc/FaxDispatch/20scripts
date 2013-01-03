@@ -1,0 +1,9 @@
+DISPATCH_DIR=/var/spool/hylafax/etc/dispatch/
+
+for f in `ls $DISPATCH_DIR`
+do
+    if [ -x $DISPATCH_DIR$f ]; then
+        $DISPATCH_DIR$f @
+    fi
+done
+

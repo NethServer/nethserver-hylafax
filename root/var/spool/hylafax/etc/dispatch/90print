@@ -1,0 +1,8 @@
+#!/bin/bash
+
+. print.conf
+
+if [ "x$driver" != 'x' ]  && [ "x$name" != 'x' ]; then
+        /usr/bin/tiff2ps -a -w 8.20 -h 11.54 -H 11.90 \$FILE | lpr -P $name
+fi
+

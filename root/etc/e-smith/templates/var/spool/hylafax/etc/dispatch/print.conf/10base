@@ -1,0 +1,6 @@
+{
+my $driver = $hylafax{'PrinterDriver'} || '';
+my $name = $hylafax{'PrinterName'} || '';
+$OUT.="driver=$driver\n";
+$OUT.="name=$name\n";
+}

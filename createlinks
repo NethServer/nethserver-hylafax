@@ -54,9 +54,16 @@ event_services($event, 'hylafax' => 'restart');
 
 $event = "nethserver-hylafax-save";
 
-event_services($event, 'ejabberd' => 'restart');
-event_services($event, 'httpd' => 'reload');
-#templates2events("/etc/ejabberd/ejabberd.cfg",  $event);
+templates2events("/var/spool/hylafax/etc/config",$event);
+templates2events("/var/spool/hylafax/etc/hosts.hfaxd",$event);
+templates2events("/var/spool/hylafax/etc/FaxDispatch",$event);
+templates2events("/var/spool/hylafax/etc/FaxNotify",$event);
+templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
+templates2events("/etc/hylafax/hyla.conf",$event);
+nethserver-hylafax-modemsetup
+nethserver-hylafax-sambafax
+
+event_services($event, 'hylafax' => 'restart');
 
 #--------------------------------------------------
 # actions for nethserver-hylafax-uninstall event

@@ -8,7 +8,7 @@ Source: %{name}-%{version}.tar.gz
 Packager: Giacomo Sanchietti <giacomo.sanchietti@nethesis.it>
 BuildArch: noarch
 Requires: hylafax >= hylafax-5.5.0, urw-fonts, perl-Mail-Sendmail, enscript
-Requires: cups
+Requires: nethserver-cups, nethserver-mail-server
 BuildRequires: nethserver-devtools
 AutoReq: no
 
@@ -22,9 +22,12 @@ NethServer module to configure hylafax+
 %pre
 
 %post
-/etc/e-smith/events/actions/conf-hylafax-startup
+source /etc/nethserver/rpm_hook_functions
+event_queue add %{name}-update
 
 %preun
+source /etc/nethserver/rpm_hook_functions
+signal_event  %{name}-uninstall $1
 
 %postun
 
@@ -56,10 +59,6 @@ mkdir -p var/lib/nethserver/fax/docs/received
     --file /var/spool/hylafax/bin/mail2fax.sh 'attr(0755,root,root)' \
     --file /var/spool/hylafax/bin/notify.report 'attr(0755,root,root)' \
     --file /usr/local/bin/salsafax 'attr(0755,root,root)' \
-    --file /etc/e-smith/events/actions/conf-hylafax-initdb 'attr(0755,root,root)' \
-    --file /etc/e-smith/events/actions/conf-hylafax-startup 'attr(0755,root,root)' \
-    --file /etc/e-smith/events/actions/checkpc 'attr(0755,root,root)' \
-    --file /etc/rc.d/init.d/supervise/faxq 'attr(0755,root,root)' \
     --ignoredir /var/spool/hylafax/etc \
     --ignoredir /var/spool/hylafax \
     --file /var/spool/hylafax/etc/setup.cache 'attr(0644,uucp,uucp)' \

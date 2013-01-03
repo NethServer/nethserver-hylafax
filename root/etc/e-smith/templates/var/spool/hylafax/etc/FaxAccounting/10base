@@ -1,3 +1,0 @@
-# save data into database and archive faxes
-. /var/spool/hylafax/etc/faxaccounting.default
-

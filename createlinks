@@ -39,7 +39,6 @@ event_actions($event,
               'runlevel-adjust' => '40');
 
 templates2events("/var/spool/hylafax/etc/config",$event);
-templates2events("/var/spool/hylafax/etc/FaxAccounting",$event);
 templates2events("/var/spool/hylafax/etc/hosts.hfaxd",$event);
 templates2events("/var/spool/hylafax/etc/FaxDispatch",$event);
 templates2events("/var/spool/hylafax/etc/FaxNotify",$event);

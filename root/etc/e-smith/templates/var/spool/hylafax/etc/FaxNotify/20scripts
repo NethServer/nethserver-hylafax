@@ -1,0 +1,9 @@
+NOTIFY_DIR=/var/spool/hylafax/etc/notify/
+
+for f in `ls $NOTIFY_DIR`
+do
+    if [ -x $NOTIFY_DIR$f ]; then
+        $NOTIFY_DIR$f @
+    fi
+done
+

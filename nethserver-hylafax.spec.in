@@ -1,5 +1,5 @@
-Summary: NethServer module to configure hylafax+
-Name: name nethserver-hylafax
+Summary: NethServer module to configure Hylafax+
+Name: nethserver-hylafax
 Version: @@VERSION@@
 Release: @@RELEASE@@%{?dist}
 License: GPL
@@ -13,7 +13,7 @@ BuildRequires: nethserver-devtools
 AutoReq: no
 
 %description
-NethServer module to configure hylafax+
+NethServer module to configure Hylafax+
 
 
 %prep

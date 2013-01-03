@@ -44,9 +44,9 @@ mkdir -p var/lib/nethserver/fax/docs/received
 /bin/rm -f %{name}-%{version}-filelist
 
 /sbin/e-smith/genfilelist \
-    --dir /var/lib/nethserver/fax/docs/ 'attr(0775,uucp,www)' \
-    --dir /var/lib/nethserver/fax/docs/received 'attr(0775,uucp,www)' \
-    --dir /var/lib/nethserver/fax/docs/sent 'attr(0775,uucp,www)' \
+    --dir /var/lib/nethserver/fax/docs/ 'attr(0775,uucp,uucp)' \
+    --dir /var/lib/nethserver/fax/docs/received 'attr(0775,uucp,uucp)' \
+    --dir /var/lib/nethserver/fax/docs/sent 'attr(0775,uucp,uucp)' \
     --file /usr/sbin/neth-addmodem 'attr(0755,root,root)' \
     --file /usr/sbin/neth-faxsetup 'attr(0755,root,root)' \
     --file /var/spool/hylafax/bin/mail2fax.sh 'attr(0755,root,root)' \

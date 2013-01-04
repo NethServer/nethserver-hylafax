@@ -4,11 +4,12 @@ use esmith::Build::CreateLinks qw(:all);
 use File::Basename;
 use File::Path;
 
-foreach (qw(FaxNotify FaxAccounting FaxDispatch))
+foreach (qw(FaxNotify FaxDispatch))
 {
     safe_symlink("/etc/e-smith/templates-default/template-begin-shell",
         "root/etc/e-smith/templates/var/spool/hylafax/etc/$_/template-begin");
 }
+safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-smith/templates/etc/cron.daily/hylafax");
 
 
 safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");
@@ -44,6 +45,7 @@ templates2events("/var/spool/hylafax/etc/FaxDispatch",$event);
 templates2events("/var/spool/hylafax/etc/FaxNotify",$event);
 templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
 templates2events("/etc/hylafax/hyla.conf",$event);
+templates2events("/etc/cron.daily/hylafax",$event);
 
 event_services($event, 'hylafax' => 'restart');
 
@@ -61,6 +63,7 @@ templates2events("/var/spool/hylafax/etc/FaxNotify",$event);
 templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
 templates2events("/etc/hylafax/hyla.conf",$event);
 templates2events("/var/spool/hylafax/etc/dispatch/print.conf",$event);
+templates2events("/etc/cron.daily/hylafax",$event);
 
 event_actions($event,
              'nethserver-hylafax-modemsetup' => 20,

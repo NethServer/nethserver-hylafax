@@ -1,9 +1,9 @@
-#!/bin/bash
 {
   my $sendreport=$hylafax{SendReport} || "disabled";
-  if($sendreport eq "enabled")
-  {
-    $OUT.="/usr/sbin/faxcron | mail -s \"HylaFAX Usage Report\" faxmaster";
+  if($sendreport eq "enabled")   {
+    $OUT.="/usr/sbin/faxcron | mail -s 'HylaFAX Usage Report' faxmaster";
+  } else {
+    $OUT.="#Hylafax Usage Report DISABLED";
   }
 }
 exit 0

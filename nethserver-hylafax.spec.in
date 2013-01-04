@@ -59,6 +59,7 @@ mkdir -p var/lib/nethserver/fax/docs/received
     --ignoredir /var/spool/hylafax \
     --file /var/spool/hylafax/etc/setup.cache 'attr(0644,uucp,uucp)' \
     $RPM_BUILD_ROOT > %{name}-%{version}-%{release}-filelist
+echo "%doc COPYING"          >> %{name}-%{version}-filelist
 
 %clean
 rm -rf $RPM_BUILD_ROOT

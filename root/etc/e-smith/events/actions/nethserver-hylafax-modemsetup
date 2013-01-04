@@ -46,14 +46,14 @@ if ($FaxDevice ne 'iax') {
 
 
 # stop all faxgetty-* services and remove relative files
-my @files = </etc/event.d/faxgetty-*>;
+my @files = </etc/event.d/faxgetty-*.conf>;
 foreach my $file (@files) {
    system("/sbin/stop ".basename($file));
    unlink($file);
 } 
 
 # create upstart file
-my $upstart_file="/etc/event.d/faxgetty-$FaxDevice";
+my $upstart_file="/etc/init/faxgetty-$FaxDevice.conf";
 my $doc = <<END
 start on runlevel 2
 start on runlevel 3

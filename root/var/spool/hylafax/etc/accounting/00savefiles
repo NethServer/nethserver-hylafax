@@ -1,38 +1,15 @@
 #!/bin/bash
-data="$1"; shift
-ENTRYTYPE="$1"; shift
-commid="$1"; shift
-DEVICE="$1"; shift
-jobid="$1"; shift
-JOBTAG="$1"; shift
-USERID="$1"; shift
-number="$1"; shift
-TSI="$1"; shift
-PARAMS="$1"; shift
-totpages="$1"; shift
-JTIME="$1"; shift
-CONNTIME="$1"; shift
-faxstatus="$1"; shift
-CIDNAME="$1"; shift
-CIDNUMBER="$1"; shift
-CALLID="$1"; shift
-owner="$1"; shift
-DCS="$1"; shift
-JOBINFO="$1"; shift
 
-totdials=`echo $JOBINFO | cut -d'/' -f4`
+# logger -t FaxAccounting $@
+
+date="$1"; shift
+time="$2"; shift
+ENTRYTYPE="$1"; shift
+jobid="$1"; shift
+
 DOCHOME=/var/lib/nethserver/fax/docs
 
-if [ "$faxstatus" != "" ] || [ "$ENTRYTYPE" == "UNSENT" ]; then
-	state=8;
-else
-	state=7;
-fi
-
-if [ $JTIME == '' ]; then
-    JTIME=0
-fi
-
+# logger -t FaxAccounting entrytype = $ENTRYTYPE
 
 case $ENTRYTYPE in
 "UNSENT")
@@ -65,11 +42,11 @@ case $ENTRYTYPE in
 	File_dest=`echo $File | cut -d'.' -f1,2`
 	File_dest=`basename $File_dest`
 	File="/var/spool/hylafax/$File"
-	#logger -t DEBUG "cp $File $DOCHOME$pathsent/$File_dest" 
+	# logger -t FaxAccounting "cp $File $DOCHOME$pathsent/$File_dest" 
         if [ ! -z $File ] && [ -f $File ] && [ ! -f "$DOCHOME$pathsent/$File_dest" ]; then       #check if sent file is empty
 		cp $File "$DOCHOME$pathsent/$File_dest" && chmod 666 "$DOCHOME$pathsent/$File_dest"
 	else
-		logger -t Hylfax "Can't save sent file (jobid: $jobid) -> $File"
+		logger -t FaxAccounting "Can't save sent file (jobid: $jobid) -> $File"
 	fi
 ;;
 

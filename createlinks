@@ -9,7 +9,7 @@ foreach (qw(FaxNotify FaxDispatch))
     safe_symlink("/etc/e-smith/templates-default/template-begin-shell",
         "root/etc/e-smith/templates/var/spool/hylafax/etc/$_/template-begin");
 }
-safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-smith/templates/etc/cron.daily/hylafax");
+safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-smith/templates/etc/cron.daily/hylafax/template-begin");
 
 
 safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");

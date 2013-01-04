@@ -1,6 +1,6 @@
 {
-my $driver = $hylafax{'PrinterDriver'} || '';
 my $name = $hylafax{'PrinterName'} || '';
-$OUT.="driver=$driver\n";
+my $print = $hylafax{'PrintReceived'} || 'disabled';
+$OUT.="print=$print\n";
 $OUT.="name=$name\n";
 }

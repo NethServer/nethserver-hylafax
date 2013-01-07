@@ -19,11 +19,8 @@ $notification = $view->panel()
     ->setAttribute('title', $T('FaxServer_Notification_Title'))
     #->insert($view->textInput('SendTo'))
     ->insert($view->selector('SendTo', $view::SELECTOR_DROPDOWN))
-    ->insert($view->textLabel('DispatchFileType')->setAttribute('template', $T('DispatchFileType_label')))
-    ->insert($view->checkbox('DispatchFileTypePDF','pdf')->setAttribute('uncheckedValue', ''))
-    ->insert($view->checkbox('DispatchFileTypePS','ps')->setAttribute('uncheckedValue', ''))
-    ->insert($view->checkbox('DispatchFileTypeTIF','tif')->setAttribute('uncheckedValue', ''))
-    ->insert($view->textInput('NotifyFileType'))
+    ->insert($view->selector('DispatchFileTypeList', $view::SELECTOR_MULTIPLE))
+    ->insert($view->selector('NotifyFileTypeList', $view::SELECTOR_MULTIPLE))
 ;
 
 $extra = $view->panel()

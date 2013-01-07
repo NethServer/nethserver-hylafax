@@ -55,11 +55,11 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('FaxDevice', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxDevice'));
         $this->declareParameter('Mode', Validate::ANYTHING, array('configuration', 'hylafax', 'Mode'));
         $this->declareParameter('WaitDialTone', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'WaitDialTone'));
-        $this->declareParameter('PBXPrefix', Validate::POSITIVE_INTEGER, array('configuration', 'hylafax', 'PBXPrefix'));
+        $this->declareParameter('PBXPrefix', Validate::ANYTHING, array('configuration', 'hylafax', 'PBXPrefix'));
 
         $this->declareParameter('SendTo', Validate::ANYTHING, array('configuration', 'hylafax', 'SendTo'));
-        $this->declareParameter('DispatchFileType', Validate::ANYTHING, array('configuration', 'hylafax', 'DispatchFileType'));
-        $this->declareParameter('NotifyFileType', Validate::ANYTHING, array('configuration', 'hylafax', 'NotifyFileType'));
+        $this->declareParameter('DispatchFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'DispatchFileType', ','));
+        $this->declareParameter('NotifyFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'NotifyFileType', ','));
 
         $this->declareParameter('ClientShowReceived', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'ClientShowReceived'));
         $this->declareParameter('PrintReceived', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'PrinterReceived'));
@@ -82,6 +82,12 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $view['FaxDeviceDatasource'] = $this->readFaxDeviceDatasource($view);
         $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
         $view['SendToDatasource'] = $this->readSendToDatasource();
+        $view['DispatchFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
+            return array($fmt, $view->translate($fmt . '_label'));
+        }, array('pdf', 'tiff', 'ps'));
+        $view['NotifyFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
+            return array($fmt, $view->translate($fmt . '_label'));
+        }, array('pdf', 'tiff', 'ps'));
     }
 
     private function readModeDatasource(\Nethgui\View\ViewInterface $view)

@@ -23,15 +23,16 @@ $modem = $view->panel()
 ;
 $notification = $view->panel()
     ->setAttribute('title', $T('FaxServer_Notification_Title'))
+    ->insert($view->selector('DispatchFileTypeList', $view::SELECTOR_MULTIPLE))
     ->insert($view->fieldsetSwitch('SendToType', 'pseudonym', $view::FIELDSETSWITCH_EXPANDABLE)
         ->insert($view->selector('SendToPseudonym', $view::SELECTOR_DROPDOWN))
     )
     ->insert($view->fieldsetSwitch('SendToType', 'custom', $view::FIELDSETSWITCH_EXPANDABLE)
         ->insert($view->textInput('SendToCustom'))
     )
-    ->insert($view->selector('DispatchFileTypeList', $view::SELECTOR_MULTIPLE))
     ->insert($view->selector('NotifyFileTypeList', $view::SELECTOR_MULTIPLE))
     ->insert($view->selector('NotifyMaster', $view::SELECTOR_DROPDOWN))
+    ->insert($view->checkbox('SummaryReport','enabled')->setAttribute('uncheckedValue', 'disabled'))
 ;
 
 $extra = $view->panel()
@@ -42,7 +43,6 @@ $extra = $view->panel()
     ->insert($view->selector('PrinterName', $view::SELECTOR_DROPDOWN)))
     ->insert($view->checkbox('SambaFax','enabled')->setAttribute('uncheckedValue', 'disabled'))
     ->insert($view->checkbox('SendReport','enabled')->setAttribute('uncheckedValue', 'disabled'))
-    ->insert($view->checkbox('SummaryReport','enabled')->setAttribute('uncheckedValue', 'disabled'))
 ;
 
 $tabs = $view->tabs()

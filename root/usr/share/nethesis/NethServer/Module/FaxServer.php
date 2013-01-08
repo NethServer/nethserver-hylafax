@@ -38,13 +38,20 @@ class FaxServer extends \Nethgui\Controller\AbstractController
      */
     private $process;
 
+    /**
+     *
+     *
+     * @var Array list of valid devices
+     */
+    private $devices = array('ttyS0','ttyS1','ttyS2','ttyACM0','ttyUSB0','iax');
+
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $base)
     {
         return \Nethgui\Module\SimpleModuleAttributesProvider::extendModuleAttributes($base, 'Configuration', 50);
     }
 
 
-    public  function initialize()
+    public function initialize()
     {
         parent::initialize();
         $this->declareParameter('CountryCode', Validate::ANYTHING, array('configuration', 'hylafax', 'CountryCode'));
@@ -52,12 +59,20 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('FaxNumber', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxNumber'));
         $this->declareParameter('FaxName', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxName'));
 
+        $validator = $this->createValidator()->memberOf($this->devices);
+
         $this->declareParameter('FaxDevice', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxDevice'));
-        $this->declareParameter('Mode', Validate::ANYTHING, array('configuration', 'hylafax', 'Mode'));
+        $modeValidator = $this->createValidator()->memberOf(array('send','receive','both'));
+        $this->declareParameter('Mode', $modeValidator, array('configuration', 'hylafax', 'Mode'));
         $this->declareParameter('WaitDialTone', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'WaitDialTone'));
         $this->declareParameter('PBXPrefix', Validate::ANYTHING, array('configuration', 'hylafax', 'PBXPrefix'));
+        $nmValidator = $this->createValidator()->memberOf(array('always','never','errors'));
+        $this->declareParameter('NotifyMaster', Validate::ANYTHING, array('configuration', 'hylafax', 'NotifyMaster'));
 
-        $this->declareParameter('SendTo', Validate::ANYTHING, array('configuration', 'hylafax', 'SendTo'));
+        $this->declareParameter('SendToType', $this->createValidator()->memberOf(array('pseudonym','custom')), array());
+        $this->declareParameter('SendToCustom', Validate::EMAIL, array());
+        $this->declareParameter('SendToPseudonym', Validate::EMAIL, array());
+        $this->declareParameter('SendTo', FALSE, array('configuration', 'hylafax', 'SendTo')); # not accessibile from UI, position is IMPORTANT
         $this->declareParameter('DispatchFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'DispatchFileType', ','));
         $this->declareParameter('NotifyFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'NotifyFileType', ','));
 
@@ -70,6 +85,56 @@ class FaxServer extends \Nethgui\Controller\AbstractController
 
     }
 
+    public function readSendToPseudonym()
+    {
+        if ($this->parameters["SendToType"] === 'pseudonym') {
+             return $this->parameters["SendTo"];
+        } else {
+             return "";
+        }
+    }
+
+    public function writeSendToPseudonym($value)
+    {
+        if ($this->parameters["SendToType"] === 'pseudonym') {
+             $this->parameters["SendTo"] = $value;
+        }
+        return true;
+    }
+
+    public function readSendToType()
+    {
+        $current = $this->getPlatform()->getDatabase('configuration')->getProp('hylafax','SendTo');
+        if (in_array($current,array_keys($this->getPlatform()->getDatabase('accounts')->getAll('pseudonym')))) {
+            return "pseudonym";
+        } else {
+            return "custom";
+        }
+    }
+
+    public function writeSendToType($value)
+    {
+        return true;
+    }
+
+    public function readSendToCustom()
+    {
+        if ($this->parameters["SendToType"] === 'custom') {
+             return $this->parameters["SendTo"];
+        } else {
+             return "";
+        }
+    }
+    
+    public function writeSendToCustom($value)
+    {
+        if ($this->parameters["SendToType"] === 'custom') {
+             $this->parameters["SendTo"] = $value;
+        }
+        return true;
+    }
+
+
     protected function onParametersSaved($changes)
     {
         $this->getPlatform()->signalEvent('nethserver-hylafax-save@post-process');
@@ -81,7 +146,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $view['ModeDatasource'] = $this->readModeDatasource($view);
         $view['FaxDeviceDatasource'] = $this->readFaxDeviceDatasource($view);
         $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
-        $view['SendToDatasource'] = $this->readSendToDatasource();
+        $view['SendToPseudonymDatasource'] = $this->readSendToPseudonymDatasource();
         $view['DispatchFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('pdf', 'tiff', 'ps'));
@@ -101,34 +166,32 @@ class FaxServer extends \Nethgui\Controller\AbstractController
 
     private function readFaxDeviceDatasource(\Nethgui\View\ViewInterface $view)
     {
-        return array(
-            array('ttyS0',$view->translate('ttyS0_label')),
-            array('ttyS1',$view->translate('ttyS1_label')),
-            array('ttyS2',$view->translate('ttyS2_label')),
-            array('ttyACM0',$view->translate('ttyACM0_label')),
-            array('ttyUSB0',$view->translate('ttyUSB0_label')),
-            array('iax',$view->translate('iax_label')),
-        );
+        $ret = array();
+        foreach ($this->devices as $device)
+            $ret[] = array($device,$view->translate($device.'_label'));
+        return $ret;
     }
     
     private function readPrinterNameDatasource(\Nethgui\View\ViewInterface $view)
     {
         $bin = "/usr/bin/lpstat";
         $printers[] = array('',$view->translate('no_printer_label'));
-        if (file_exists($bin)) {
+        if ($this->getPhpWrapper()->file_exists($bin)) { # make call testable
             $printers = array();
             $lines = array();
-            exec("$bin -a",$lines);
+            $lines = $this->getPlatform()->exec("$bin -a")->getOutputArray();
             foreach ($lines as $l) {
-              $fields=split(' ',$l);
-               $printers[]=array($fields[0],$fields[0]);
+                $fields=explode(' ',$l);
+                $field = trim($fields[0]);
+                if ($field)
+                    $printers[]=array($field,$field);
             }
         }
   
         return $printers;
     }
 
-     private function readSendToDatasource()
+    private function readSendToPseudonymDatasource()
     {
         $res = array();
 
@@ -138,6 +201,5 @@ class FaxServer extends \Nethgui\Controller\AbstractController
 
         return $res;
     }
-
 
 }

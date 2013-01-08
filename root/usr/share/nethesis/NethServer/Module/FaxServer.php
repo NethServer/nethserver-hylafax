@@ -67,7 +67,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('WaitDialTone', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'WaitDialTone'));
         $this->declareParameter('PBXPrefix', Validate::ANYTHING, array('configuration', 'hylafax', 'PBXPrefix'));
         $nmValidator = $this->createValidator()->memberOf(array('always','never','errors'));
-        $this->declareParameter('NotifyMaster', Validate::ANYTHING, array('configuration', 'hylafax', 'NotifyMaster'));
+        $this->declareParameter('NotifyMaster', $nmValidator, array('configuration', 'hylafax', 'NotifyMaster'));
 
         $this->declareParameter('SendToType', $this->createValidator()->memberOf(array('pseudonym','custom')), array());
         $this->declareParameter('SendToCustom', Validate::EMAIL, array());
@@ -153,6 +153,10 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $view['NotifyFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('pdf', 'tiff', 'ps'));
+        $view['NotifyMasterDatasource'] = array_map(function($fmt) use ($view) {
+            return array($fmt, $view->translate($fmt . '_label'));
+        }, array('always', 'never', 'errors'));
+
     }
 
     private function readModeDatasource(\Nethgui\View\ViewInterface $view)

@@ -25,6 +25,7 @@ $notification = $view->panel()
     )
     ->insert($view->selector('DispatchFileTypeList', $view::SELECTOR_MULTIPLE))
     ->insert($view->selector('NotifyFileTypeList', $view::SELECTOR_MULTIPLE))
+    ->insert($view->selector('NotifyMaster', $view::SELECTOR_DROPDOWN))
 ;
 
 $extra = $view->panel()

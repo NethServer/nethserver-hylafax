@@ -203,10 +203,10 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         }, $this->devices);
         $view['DispatchFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
-        }, array('pdf', 'tiff', 'ps'));
+        }, array('pdf', 'tif', 'ps'));
         $view['NotifyFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
-        }, array('pdf', 'tiff', 'ps'));
+        }, array('pdf', 'tif', 'ps'));
         $view['NotifyMasterDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('always', 'never', 'errors'));

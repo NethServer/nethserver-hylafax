@@ -59,11 +59,10 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('FaxNumber', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxNumber'));
         $this->declareParameter('FaxName', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxName'));
 
-        $validator = $this->createValidator()->memberOf($this->devices);
-
+        $fdValidator = $this->createValidator()->memberOf($this->devices);
         $this->declareParameter('FaxDeviceType', $this->createValidator()->memberOf(array('custom','known')), array());
         $this->declareParameter('FaxDeviceCustom', Validate::ANYTHING, array());
-        $this->declareParameter('FaxDeviceKnown', Validate::ANYTHING, array());
+        $this->declareParameter('FaxDeviceKnown', $fdValidator, array());
         $this->declareParameter('FaxDevice', FALSE, array('configuration', 'hylafax', 'FaxDevice')); # not accessibile from UI, position is IMPORTANT
         $modeValidator = $this->createValidator()->memberOf(array('send','receive','both'));
         $this->declareParameter('Mode', $modeValidator, array('configuration', 'hylafax', 'Mode'));
@@ -195,10 +194,13 @@ class FaxServer extends \Nethgui\Controller\AbstractController
     public function prepareView(\Nethgui\View\ViewInterface $view)
     {
         parent::prepareView($view);
-        $view['ModeDatasource'] = $this->readModeDatasource($view);
-        $view['FaxDeviceKnownDatasource'] = $this->readFaxDeviceKnownDatasource($view);
-        $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
-        $view['SendToPseudonymDatasource'] = $this->readSendToPseudonymDatasource();
+        $view['ModeDatasource'] = array_map(function($fmt) use ($view) {
+            return array($fmt, $view->translate($fmt . '_label'));
+        }, array('receive', 'send', 'both'));
+
+        $view['FaxDeviceKnownDatasource'] = array_map(function($fmt) use ($view) {
+            return array($fmt, $view->translate($fmt . '_label'));
+        }, $this->devices);
         $view['DispatchFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('pdf', 'tiff', 'ps'));
@@ -208,26 +210,12 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $view['NotifyMasterDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('always', 'never', 'errors'));
+        
+        $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
+        $view['SendToPseudonymDatasource'] = $this->readSendToPseudonymDatasource();
 
     }
 
-    private function readModeDatasource(\Nethgui\View\ViewInterface $view)
-    {
-        return array(
-            array('receive',$view->translate('receive_label')),
-            array('send',$view->translate('send_label')),
-            array('both',$view->translate('both_label')),
-        );
-    }
-
-    private function readFaxDeviceKnownDatasource(\Nethgui\View\ViewInterface $view)
-    {
-        $ret = array();
-        foreach ($this->devices as $device)
-            $ret[] = array($device,$view->translate($device.'_label'));
-        return $ret;
-    }
-    
     private function readPrinterNameDatasource(\Nethgui\View\ViewInterface $view)
     {
         $bin = "/usr/bin/lpstat";

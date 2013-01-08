@@ -61,7 +61,10 @@ class FaxServer extends \Nethgui\Controller\AbstractController
 
         $validator = $this->createValidator()->memberOf($this->devices);
 
-        $this->declareParameter('FaxDevice', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxDevice'));
+        $this->declareParameter('FaxDeviceType', $this->createValidator()->memberOf(array('custom','known')), array());
+        $this->declareParameter('FaxDeviceCustom', Validate::ANYTHING, array());
+        $this->declareParameter('FaxDeviceKnown', Validate::ANYTHING, array());
+        $this->declareParameter('FaxDevice', FALSE, array('configuration', 'hylafax', 'FaxDevice')); # not accessibile from UI, position is IMPORTANT
         $modeValidator = $this->createValidator()->memberOf(array('send','receive','both'));
         $this->declareParameter('Mode', $modeValidator, array('configuration', 'hylafax', 'Mode'));
         $this->declareParameter('WaitDialTone', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'WaitDialTone'));
@@ -82,8 +85,57 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('SambaFax', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SambaFax'));
         $this->declareParameter('SendReport', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SendReport'));
         $this->declareParameter('SummaryReport', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SummaryReport'));
-
     }
+
+    public function readFaxDeviceKnown()
+    {
+        if ($this->parameters["FaxDeviceType"] === 'known') {
+             return $this->parameters["FaxDevice"];
+        } else {
+             return "";
+        }
+    }
+
+    public function writeFaxDeviceKnown($value)
+    {
+        if ($this->parameters["FaxDeviceType"] === 'known') {
+             $this->parameters["FaxDevice"] = $value;
+        }
+        return true;
+    }
+
+    public function readFaxDeviceCustom()
+    {
+        if ($this->parameters["FaxDeviceType"] === 'custom') {
+             return $this->parameters["FaxDevice"];
+        } else {
+             return "";
+        }
+    }
+
+    public function writeFaxDeviceCustom($value)
+    {
+        if ($this->parameters["FaxDeviceType"] === 'custom') {
+             $this->parameters["FaxDevice"] = $value;
+        }
+        return true;
+    }
+
+   public function readFaxDeviceType()
+    {
+        $current = $this->getPlatform()->getDatabase('configuration')->getProp('hylafax','FaxDevice');
+        if (in_array($current,$this->devices)) {
+            return "known";
+        } else {
+            return "custom";
+        }
+    }
+
+    public function writeFaxDeviceType($value)
+    {
+        return true;
+    }
+
 
     public function readSendToPseudonym()
     {
@@ -144,7 +196,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
     {
         parent::prepareView($view);
         $view['ModeDatasource'] = $this->readModeDatasource($view);
-        $view['FaxDeviceDatasource'] = $this->readFaxDeviceDatasource($view);
+        $view['FaxDeviceKnownDatasource'] = $this->readFaxDeviceKnownDatasource($view);
         $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
         $view['SendToPseudonymDatasource'] = $this->readSendToPseudonymDatasource();
         $view['DispatchFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
@@ -168,7 +220,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         );
     }
 
-    private function readFaxDeviceDatasource(\Nethgui\View\ViewInterface $view)
+    private function readFaxDeviceKnownDatasource(\Nethgui\View\ViewInterface $view)
     {
         $ret = array();
         foreach ($this->devices as $device)

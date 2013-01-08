@@ -33,14 +33,16 @@ case $ENTRYTYPE in
 	# === Saving file === #
 	File=''
 	File=`grep '^[!]*pdf' /var/spool/hylafax/sendq/q$jobid | cut -d ':' -f4`
+	extension=pdf
 	if [ -z $File ]; then
 		File=`grep '^[!]*tiff' /var/spool/hylafax/sendq/q$jobid | cut -d ':' -f4`
+		extension=tif
 	fi
 	if [ -z $File ]; then
 		File=`grep '^[!]*postscript' /var/spool/hylafax/sendq/q$jobid | cut -d ':' -f4`
+		extension=ps
 	fi
-	File_dest=`echo $File | cut -d'.' -f1,2`
-	File_dest=`basename $File_dest`
+	File_dest="$jobid.$extension"
 	File="/var/spool/hylafax/$File"
 	# logger -t FaxAccounting "cp $File $DOCHOME$pathsent/$File_dest" 
         if [ ! -z $File ] && [ -f $File ] && [ ! -f "$DOCHOME$pathsent/$File_dest" ]; then       #check if sent file is empty

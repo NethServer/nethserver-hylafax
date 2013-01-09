@@ -1,5 +1,5 @@
 #%PAM-1.0
 auth       required     pam_stack.so service=system-auth
-auth       required     pam_succeed_if.so user ingroup faxmanager
+auth       required     pam_succeed_if.so user ingroup faxmaster
 account    required     pam_stack.so service=system-auth
 session    required     pam_stack.so service=system-auth

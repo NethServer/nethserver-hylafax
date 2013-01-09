@@ -21,96 +21,21 @@
 
 use strict;
 use NethServer::Service;
-use esmith::AccountsDB;
+use esmith::event;
 NethServer::Service::manage_add('nethserver-hylafax', 'hylafax');
 
 
-# Add faxmanager admin group
+# Add faxmaster admin group
 
-my $luseradd = '/usr/sbin/luseradd';
-my $accountsDb = esmith::AccountsDB->open() or die("Could not open AccountsDB");
 my $exitCode = 0;
 
-my $entries = {
-    faxmanager => {
-        type => 'group',
-        name => 'FaxServer Admins'
-    },
-};
+my $group = 'faxmaster';
 
-sub initializeGroupRecord
-{
-    my $groupName = shift;
-    my $description = shift;
-
-    # note that $group is a user account passwd entry:
-    my $pwent = getpwnam($groupName);
-
-    if( ! $pwent) {
-        warn "Could not find system group $groupName";
-        return 0;  # failure;
-    }
-
-    my $groupRecord = $accountsDb->get($groupName);
-
-    # Nothing to to if the record does not exists, or is already initialized.
-    if( ! $groupRecord || $groupRecord->prop('Uid') || $groupRecord->prop('Gid')) {
-        return 1; # success -- nothing to do.
-    }
-
-    # This is a strict check:
-    if( $groupRecord->prop('type') ne 'group') {
-        warn "The `$groupName` account is not of type group";
-        return 0; # error
-    }
-
-    # Initialize the group record:
-    $groupRecord->merge_props(
-        'Gid' => $pwent->gid,
-        'Uid' => $pwent->uid,
-        'Description' => $description,
-        'Removable' => 'no'
-        );
-
-    return 1; # success
+my $grent = getgrnam($group);
+if( ! $grent) {
+    $exitCode += esmith::event::event_signal('group-create', $group);
 }
 
-while ( my ($group, $entry) = each(%$entries) ) {
-
-    if(getgrnam($group)) {
-        # warn "Ignoring existing group `$group`..\n";
-        next;
-    }
-
-    # Create a system user and private group entry:
-    qx($luseradd -s /bin/false -r $group);
-    if($? != 0) {
-        warn "Failed to create system samba group `$group`";
-        $exitCode ++;
-        next;
-    }
-
-    if( ! initializeGroupRecord($group, $entry->{'name'})) {
-        $exitCode ++;
-    }
-
-}
-
-
-# Add faxmaster pseudonym
-
-my %fprops = (
-    'type', 'pseudonym', 'Account', 'admin'
-);
-
-my $fmaster = $accountsDb->get('faxmaster') || 'false';
-if ($fmaster eq 'false') {
-	$accountsDb->new_record( 'faxmaster', \%fprops );
-	my $msg =
-    	  system( "/sbin/e-smith/signal-event", "pseudonym-create" )
-            ? 'CREATE_ERROR'
-            : 'CREATED_GROUP';
-}
 
 
 exit($exitCode);

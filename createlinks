@@ -82,3 +82,9 @@ event_actions($event,
               'firewall-adjust' => '40',
               'runlevel-adjust' => '50');
 
+#--------------------------------------------------
+# actions for migration-import event
+#--------------------------------------------------
+
+$event = "migration-import";
+event_actions($event, 'nethserver-hylafax-migrate' => 70);

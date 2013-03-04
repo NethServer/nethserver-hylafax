@@ -1,0 +1,7 @@
+/var/spool/hylafax/log/seqf
+/var/spool/hylafax/sendq/seqf
+/var/spool/hylafax/docq/seqf
+/var/spool/hylafax/recvq/seqf
+/var/lib/nethserver/fax/accounting
+/var/lib/nethserver/fax/dispatch
+/var/lib/nethserver/fax/notify

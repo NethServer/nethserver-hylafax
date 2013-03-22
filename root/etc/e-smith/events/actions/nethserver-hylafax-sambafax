@@ -42,10 +42,14 @@ my $SambaFax = $mabase->prop('SambaFax');
 if($SambaFax eq "enabled")
 {
     my $SambaFaxName = $mabase->prop('SambaFaxName');
-    system("/usr/sbin/lpadmin  -p '$SambaFaxName' -P /usr/share/cups/model/postscript.ppd.gz  -v 'salsafax:/' -E");
+    if ( -f "/usr/sbin/lpadmin" ) {
+        system("/usr/sbin/lpadmin  -p '$SambaFaxName' -P /usr/share/cups/model/postscript.ppd.gz  -v 'salsafax:/' -E");
+    }
 }
 else
 {
-    system("/usr/sbin/lpadmin -x sambafax > /dev/null");
+    if ( -f "/usr/sbin/lpadmin" ) {
+        system("/usr/sbin/lpadmin -x sambafax > /dev/null");
+    }
 }
 

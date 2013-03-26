@@ -7,6 +7,6 @@
 
     my $Areazone;
     {
-	   $OUT .= "AreaCode:             " . db_get_prop(\%conf, 'hylafax', 'AreaNumber');
+	   $OUT .= "AreaCode:             " . db_get_prop(\%conf, 'hylafax', 'AreaCode');
     }
 }

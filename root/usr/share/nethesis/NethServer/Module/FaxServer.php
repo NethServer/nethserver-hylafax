@@ -153,28 +153,11 @@ class FaxServer extends \Nethgui\Controller\AbstractController
     }
 
 
-    public function readSendToPseudonym()
-    {
-        if ($this->parameters["SendToType"] === 'pseudonym') {
-             return $this->parameters["SendTo"];
-        } else {
-             return "";
-        }
-    }
-
-    public function writeSendToPseudonym($value)
-    {
-        if ($this->parameters["SendToType"] === 'pseudonym') {
-             $this->parameters["SendTo"] = $value;
-        }
-        return true;
-    }
-
     public function readSendToType()
     {
         $current = $this->getPlatform()->getDatabase('configuration')->getProp('hylafax','SendTo');
-        if (in_array($current,array_keys($this->getPlatform()->getDatabase('accounts')->getAll('pseudonym')))) {
-            return "pseudonym";
+        if($current == "faxmaster") {
+            return "faxmaster";
         } else {
             return "custom";
         }
@@ -182,7 +165,12 @@ class FaxServer extends \Nethgui\Controller\AbstractController
 
     public function writeSendToType($value)
     {
-        return true;
+        if ($this->parameters["SendToType"] === 'faxmaster') {
+             $this->parameters["SendTo"] = 'faxmaster';
+             return 'faxmaster';
+        } else {
+             return "";
+        }
     }
 
     public function readSendToCustom()

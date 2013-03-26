@@ -1,4 +1,4 @@
 # FontMap/FontPath added by faxsetup 
-FontMap:   /var/spool/hylafax/etc
-FontPath:  /usr/local/lib/ghostscript/fonts:/usr/share/ghostscript/8.15/lib:/usr/share/ghostscript/8.15/Resource:/usr/share/ghostscript/fonts:/usr/share/fonts/default/ghostscript:/usr/share/fonts/default/Type1:/usr/share/fonts/default/amspsfnt/pfb:/usr/share/fonts/default/cmpsfont/pfb:/usr/share/fonts/japanese:/etc/ghostscript
+FontMap:   /usr/local/lib/ghostscript/fonts:/usr/share/ghostscript/8.70/Resource/Init:/usr/share/ghostscript/8.70/lib:/usr/share/ghostscript/8.70/Resource/Font:/usr/share/ghostscript/fonts:/usr/share/fonts/default/ghostscript:/usr/share/fonts/default/Type1:/usr/share/fonts/default/amspsfnt/pfb:/usr/share/fonts/default/cmpsfont/pfb:/usr/share/fonts:/usr/share/ghostscript/conf.d:/etc/ghostscript:/etc/ghostscript/8.70:/var/spool/hylafax/etc
+FontPath:  /usr/local/lib/ghostscript/fonts:/usr/share/ghostscript/8.70/Resource/Init:/usr/share/ghostscript/8.70/lib:/usr/share/ghostscript/8.70/Resource/Font:/usr/share/ghostscript/fonts:/usr/share/fonts/default/ghostscript:/usr/share/fonts/default/Type1:/usr/share/fonts/default/amspsfnt/pfb:/usr/share/fonts/default/cmpsfont/pfb:/usr/share/fonts:/usr/share/ghostscript/conf.d:/etc/ghostscript:/etc/ghostscript/8.70:/var/spool/hylafax/etc
 

@@ -39,17 +39,34 @@ class FaxServer extends \Nethgui\Controller\AbstractController
     private $process;
 
     /**
-     *
-     *
-     * @var Array list of valid devices
+     * @var Array list of valid devices with labels
      */
-    private $devices = array('ttyS0','ttyS1','ttyS2','ttyACM0','ttyUSB0','iax');
+    private $devices = array('ttyS0'=>'ttyS0_label','ttyS1'=>'ttyS1_label','ttyS2'=>'ttyS2_label','ttyACM0'=>'ttyACM0_label','ttyUSB0'=>'ttyUSB0_label');
+    
+    /**
+     * @var Array list of valid device labels
+     */
+    private $deviceLabels = array('ttyS0','ttyS1','ttyS2','ttyACM0','ttyUSB0');
+
+
+    /**
+    * Load all modems of type iax from modems db
+    */
+    private function loadIaxModems() 
+    {
+        $modems = $this->getPlatform()->getDatabase('modems')->getAll('iax');
+        foreach ($modems as $key => $modem) {
+            if (!isset($modem['extension']) || !$modem['extension']) {
+                continue;
+            }
+            $this->devices["ttyIAX".$modem['extension']] = $key." (IAX{$modem['extension']})";
+        }
+    }
 
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $base)
     {
         return \Nethgui\Module\SimpleModuleAttributesProvider::extendModuleAttributes($base, 'Configuration', 50);
     }
-
 
     public function initialize()
     {
@@ -59,7 +76,8 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('FaxNumber', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxNumber'));
         $this->declareParameter('FaxName', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxName'));
 
-        $fdValidator = $this->createValidator()->memberOf($this->devices);
+        $this->loadIaxModems();
+        $fdValidator = $this->createValidator()->memberOf(array_keys($this->devices));
         $this->declareParameter('FaxDeviceType', $this->createValidator()->memberOf(array('custom','known')), array());
         $this->declareParameter('FaxDeviceCustom', Validate::ANYTHING, array());
         $this->declareParameter('FaxDeviceKnown', $fdValidator, array());
@@ -71,9 +89,8 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $nmValidator = $this->createValidator()->memberOf(array('always','never','errors'));
         $this->declareParameter('NotifyMaster', $nmValidator, array('configuration', 'hylafax', 'NotifyMaster'));
 
-        $this->declareParameter('SendToType', $this->createValidator()->memberOf(array('pseudonym','custom')), array());
+        $this->declareParameter('SendToType', $this->createValidator()->memberOf(array('faxmaster','custom')), array());
         $this->declareParameter('SendToCustom', Validate::EMAIL, array());
-        $this->declareParameter('SendToPseudonym', Validate::EMAIL, array());
         $this->declareParameter('SendTo', FALSE, array('configuration', 'hylafax', 'SendTo')); # not accessibile from UI, position is IMPORTANT
         $this->declareParameter('DispatchFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'DispatchFileType', ','));
         $this->declareParameter('NotifyFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'NotifyFileType', ','));
@@ -123,7 +140,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
    public function readFaxDeviceType()
     {
         $current = $this->getPlatform()->getDatabase('configuration')->getProp('hylafax','FaxDevice');
-        if (in_array($current,$this->devices)) {
+        if (in_array($current,array_keys($this->devices))) {
             return "known";
         } else {
             return "custom";
@@ -198,9 +215,11 @@ class FaxServer extends \Nethgui\Controller\AbstractController
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('receive', 'send', 'both'));
 
-        $view['FaxDeviceKnownDatasource'] = array_map(function($fmt) use ($view) {
-            return array($fmt, $view->translate($fmt . '_label'));
-        }, $this->devices);
+        $devicies = array();
+        foreach($this->devices as $device => $label) {
+            $devices[] = array($device, $view->translate($label));
+        }
+        $view['FaxDeviceKnownDatasource'] = $devices;
         $view['DispatchFileTypeListDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('pdf', 'tif', 'ps'));

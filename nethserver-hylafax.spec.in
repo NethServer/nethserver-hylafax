@@ -54,7 +54,7 @@ mkdir -p var/lib/nethserver/fax/docs/received
     --file /var/spool/hylafax/etc/FaxAccounting 'attr(0755,root,root)' \
     --file /var/spool/hylafax/etc/accounting/00savefiles 'attr(0755,root,root)' \
     --file /var/spool/hylafax/etc/dispatch/90print 'attr(0755,root,root)' \
-    --file /usr/local/bin/salsafax 'attr(0755,root,root)' \
+    --file /usr/lib/cups/backend/salsafax 'attr(0755,root,root)' \
     --ignoredir /var/spool/hylafax/etc \
     --ignoredir /var/spool/hylafax \
     --file /var/spool/hylafax/etc/setup.cache 'attr(0644,uucp,uucp)' \

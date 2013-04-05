@@ -219,7 +219,6 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         }, array('always', 'never', 'errors'));
         
         $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
-        $view['SendToPseudonymDatasource'] = $this->readSendToPseudonymDatasource();
 
     }
 
@@ -240,17 +239,6 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         }
   
         return $printers;
-    }
-
-    private function readSendToPseudonymDatasource()
-    {
-        $res = array();
-
-        foreach ($this->getPlatform()->getDatabase('accounts')->getAll('pseudonym') as $key => $prop) {
-            $res[] = array($key, $key);
-        }
-
-        return $res;
     }
 
 }

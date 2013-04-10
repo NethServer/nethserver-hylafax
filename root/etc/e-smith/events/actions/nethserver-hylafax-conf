@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+
 #
 # Copyright (C) 2012 Nethesis S.r.l.
 # http://www.nethesis.it - support@nethesis.it
@@ -24,18 +25,14 @@ use NethServer::Service;
 use esmith::event;
 NethServer::Service::manage_add('nethserver-hylafax', 'hylafax');
 
-
 # Add faxmaster admin group
-
 my $exitCode = 0;
 
 my $group = 'faxmaster';
-
-my $grent = getgrnam($group);
-if( ! $grent) {
-    $exitCode += esmith::event::event_signal('group-create', $group);
+if( ! getgrnam($group)) {
+    if( ! esmith::event::event_signal('group-create', $group)) {
+	$exitCode ++;
+    }
 }
 
-
-
-exit($exitCode);
+exit($exitCode == 0 ? 0 : 1);

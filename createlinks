@@ -34,10 +34,7 @@ my $event = "nethserver-hylafax-update";
 
 event_actions($event,
               'initialize-default-databases' => '00',
-              'nethserver-hylafax-conf' => '02',
-#              'init-reload' => 10,
-              'firewall-adjust' => '30',
-              'runlevel-adjust' => '40');
+              'nethserver-hylafax-conf' => '02');
 
 templates2events("/var/spool/hylafax/etc/config",$event);
 templates2events("/var/spool/hylafax/etc/hosts.hfaxd",$event);
@@ -70,17 +67,6 @@ event_actions($event,
              'nethserver-hylafax-sambafax' => 20);
 
 event_services($event, 'hylafax' => 'restart');
-
-#--------------------------------------------------
-# actions for nethserver-hylafax-uninstall event
-#--------------------------------------------------
-
-$event = "nethserver-hylafax-uninstall";
-
-event_actions($event,
-              'nethserver-hylafax-uninstall' => '02',
-              'firewall-adjust' => '40',
-              'runlevel-adjust' => '50');
 
 #--------------------------------------------------
 # actions for migration-import event

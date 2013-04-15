@@ -23,7 +23,6 @@
 use strict;
 use NethServer::Service;
 use esmith::event;
-NethServer::Service::manage_add('nethserver-hylafax', 'hylafax');
 
 # Add faxmaster admin group
 my $exitCode = 0;

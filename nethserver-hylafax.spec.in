@@ -64,6 +64,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root)
 
 %changelog
+* Tue Apr 30 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.2-1.ns6
+- Rebuild for automatic package handling. #1870
+- Add migration code #1699
+- Various fixes: #1860 #1833 #1827
+
 * Tue Mar 26 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.1-1.ns6
 - Support virtual modem #1617
 - Refactor mail notification UI #1782

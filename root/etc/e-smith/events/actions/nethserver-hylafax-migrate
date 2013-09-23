@@ -58,6 +58,7 @@ if ($pname eq '') {
 } else {
     $new->set_prop('PrintReceived','enabled');
 }
+$new->set_prop('type','service');
 
 # copy fax files
 NethServer::Migrate::migrateDir("$sourceDir/$faxDir/sent","$destDir/sent");

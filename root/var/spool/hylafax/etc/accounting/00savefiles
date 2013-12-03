@@ -44,8 +44,6 @@ case $ENTRYTYPE in
 	# logger -t FaxAccounting "cp $File $DOCHOME$pathsent/$File_dest" 
         if [ ! -z $File ] && [ -f $File ] && [ ! -f "$DOCHOME$pathsent/$File_dest" ]; then       #check if sent file is empty
 		cp $File "$DOCHOME$pathsent/$File_dest" && chmod 666 "$DOCHOME$pathsent/$File_dest"
-	else
-		logger -t FaxAccounting "Can't save sent file (jobid: $jobid) -> $File"
 	fi
 ;;
 

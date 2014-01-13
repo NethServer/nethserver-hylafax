@@ -32,9 +32,9 @@ templates2events("/var/spool/hylafax/etc/hosts.hfaxd",
 
 my $event = "nethserver-hylafax-update";
 
-event_actions($event,
-              'initialize-default-databases' => '00',
-              'nethserver-hylafax-conf' => '02');
+event_actions($event, qw(
+     initialize-default-databases 00
+));
 
 templates2events("/var/spool/hylafax/etc/config",$event);
 templates2events("/var/spool/hylafax/etc/hosts.hfaxd",$event);

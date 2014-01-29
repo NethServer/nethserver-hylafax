@@ -28,6 +28,7 @@ NethServer module to configure Hylafax+
 %postun
 
 %build
+%{makedocs}
 perl createlinks
 cd root;
 mkdir -p var/spool/hylafax/notify

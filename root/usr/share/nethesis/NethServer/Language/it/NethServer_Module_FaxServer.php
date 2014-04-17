@@ -3,7 +3,7 @@
 /* FaxServer translation, language: it */
 
 $L['AreaCode_label'] = 'Prefisso';
-$L['ClientShowReceived_label'] = 'Visualizza fax inviati dai client';
+$L['ClientShowReceived_label'] = 'Visualizza fax ricevuti dai client';
 $L['CountryCode_label'] = 'Prefisso internazionale';
 $L['DispatchFileTypeList_label'] = 'Formato fax ricevuti';
 $L['FaxDevice_label'] = 'Porta modem';

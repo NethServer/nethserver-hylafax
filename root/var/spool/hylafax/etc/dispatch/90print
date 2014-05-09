@@ -2,7 +2,9 @@
 
 . /var/spool/hylafax/etc/dispatch/print.conf
 
+FILE=$1
+
 if [ "$print" = "enabled" ]; then
-        /usr/bin/tiff2ps -a -w 8.20 -h 11.54 -H 11.90 \$FILE | lpr -P $name
+        /usr/bin/tiff2ps -a -w 8.20 -h 11.54 -H 11.90 $FILE | lpr -P $name
 fi
 

@@ -1,9 +1,9 @@
 #!/bin/bash
-ACCOUNTING_DIR=/var/spool/hylafax/etc/accounting/
+ACCOUNTING_DIR=/var/spool/hylafax/etc/accounting
 
 for f in `ls $ACCOUNTING_DIR`
 do
-    if [ -x $ACCOUNTING_DIR$f ]; then
-        $ACCOUNTING_DIR$f "$@"
+    if [ -x $ACCOUNTING_DIR/$f ]; then
+        $ACCOUNTING_DIR/$f "$@"
     fi
 done

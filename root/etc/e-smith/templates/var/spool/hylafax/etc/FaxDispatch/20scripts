@@ -1,9 +1,9 @@
-DISPATCH_DIR=/var/spool/hylafax/etc/dispatch/
+DISPATCH_DIR=/var/spool/hylafax/etc/dispatch
 
 for f in `ls $DISPATCH_DIR`
 do
-    if [ -x $DISPATCH_DIR$f ]; then
-        $DISPATCH_DIR$f $FILE "$@"
+    if [ -x $DISPATCH_DIR/$f ]; then
+        $DISPATCH_DIR/$f "$FILE" "$DEVICE"
     fi
 done
 

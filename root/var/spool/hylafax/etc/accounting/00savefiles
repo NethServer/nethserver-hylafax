@@ -2,12 +2,7 @@
 
 # logger -t FaxAccounting $@
 
-date="$1"; shift
-time="$2"; shift
-ENTRYTYPE="$1"; shift
-jobid="$1"; shift
-shift
-FILENAME=$1
+ENTRYTYPE="$2"
 
 DOCHOME=/var/lib/nethserver/fax/docs
 
@@ -19,11 +14,13 @@ case $ENTRYTYPE in
 "SEND")
 ;;
 "RECV")
+	FILENAME=$5
 	FILE=$(basename $FILENAME)
         cp $FILENAME $DOCHOME/received/ && chmod 666 $DOCHOME/received/$FILE
 ;;
 
 "SUBMIT")
+	jobid="$5"
 	FAX_RPATH='/sent'
 	pathsent=$FAX_RPATH
 

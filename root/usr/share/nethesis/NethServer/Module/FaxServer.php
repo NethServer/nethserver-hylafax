@@ -96,7 +96,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('NotifyFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'NotifyFileType', ','));
 
         $this->declareParameter('ClientShowReceived', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'ClientShowReceived'));
-        $this->declareParameter('PrintReceived', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'PrinterReceived'));
+        $this->declareParameter('PrintReceived', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'PrintReceived'));
         $this->declareParameter('PrinterName', Validate::ANYTHING, array('configuration', 'hylafax', 'PrinterName'));
         $this->declareParameter('SambaFax', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SambaFax'));
         $this->declareParameter('SendReport', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SendReport'));

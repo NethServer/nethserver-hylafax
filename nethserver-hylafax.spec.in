@@ -65,6 +65,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root)
 
 %changelog
+* Fri Jun 06 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.7-1.ns6
+- Fix notify if tsi has spaces - Bug #2746
+- Fix automatic fax printing - Bug #2742
+- Missing Italian translation - Bug #2706
+
 * Thu Apr 17 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.6-1.ns6
 - Probe for physical modem is not probed - Bug #2720
 

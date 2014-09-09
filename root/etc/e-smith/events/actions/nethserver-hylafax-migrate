@@ -78,6 +78,16 @@ foreach my $file (@files) {
     copy("$sourceDir/home/e-smith/hylafax/etc/$file","/var/spool/hylafax/etc/$file");
 }
 
+my $uid   = getpwnam('uucp');
+my $gid   = getgrnam('uucp');
+chown($uid, $gid, 
+    '/var/spool/hylafax/docq/seqf',
+    '/var/spool/hylafax/recvq/seqf',
+    '/var/spool/hylafax/sendq/seqf',
+    '/var/spool/hylafax/log/seqf'
+);
+
+
 #
 # Apply configuration
 # 

@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root)
 
 %changelog
+* Thu Oct 02 2014 Davide Principi <davide.principi@nethesis.it> - 1.0.8-1.ns6
+- Hylafax: after migration faxes can't be sent or received - Bug #2790 [NethServer]
+
 * Fri Jun 06 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.7-1.ns6
 - Fix notify if tsi has spaces - Bug #2746
 - Fix automatic fax printing - Bug #2742

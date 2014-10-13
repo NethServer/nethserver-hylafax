@@ -70,6 +70,7 @@ NethServer::Migrate::migrateDir("$sourceDir/$faxDir/sentm","$destDir/sentm");
 copy("$sourceDir/home/e-smith/hylafax/log/seqf",'/var/spool/hylafax/log/seqf');
 copy("$sourceDir/home/e-smith/hylafax/sendq/seqf",'/var/spool/hylafax/sendq/seqf');
 copy("$sourceDir/home/e-smith/hylafax/docq/seqf",'/var/spool/hylafax/docq/seqf');
+copy("$sourceDir/home/e-smith/hylafax/recvq/seqf",'/var/spool/hylafax/recvq/seqf');
 NethServer::Migrate::migrateDir("$sourceDir/home/e-smith/hylafax/info","/var/spool/hylafax/info");
 NethServer::Migrate::migrateDir("$sourceDir/home/e-smith/hylafax/recvq","/var/spool/hylafax/recvq");
 my $configFiles = "$sourceDir/home/e-smith/hylafax/etc/config.*";

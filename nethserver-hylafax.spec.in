@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root)
 
 %changelog
+* Thu Oct 30 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.10-1.ns6
+- Enable passive mode fax submission - Enhancement #2937 [NethServer]
+
 * Wed Oct 15 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.9-1.ns6
 - Backup: move seqf to data backup - Feature #2739
 

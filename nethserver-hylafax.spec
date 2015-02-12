@@ -1,7 +1,7 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: @@VERSION@@
-Release: @@RELEASE@@
+Version: 1.0.9
+Release: 1
 License: GPL
 Group: Networking/Daemons
 Source: %{name}-%{version}.tar.gz

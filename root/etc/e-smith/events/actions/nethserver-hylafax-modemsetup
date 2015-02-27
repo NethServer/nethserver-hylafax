@@ -41,8 +41,9 @@ my $FaxDevice           = $mabase->prop('FaxDevice');
 
 # execute faxaddmodem only if not using iaxmodem
 if (!($FaxDevice =~ '/^ttyIAX/')) {
-  system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log");
+    exit(0);
 }
+system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log");
 
 
 # stop all faxgetty-* services and remove relative files

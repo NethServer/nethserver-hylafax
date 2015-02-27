@@ -41,27 +41,13 @@ class FaxServer extends \Nethgui\Controller\AbstractController
     /**
      * @var Array list of valid devices with labels
      */
-    private $devices = array('ttyS0'=>'ttyS0_label','ttyS1'=>'ttyS1_label','ttyS2'=>'ttyS2_label','ttyACM0'=>'ttyACM0_label','ttyUSB0'=>'ttyUSB0_label');
+    private $devices = array('ttyS0'=>'ttyS0_label','ttyS1'=>'ttyS1_label','ttyS2'=>'ttyS2_label','ttyACM0'=>'ttyACM0_label','ttyUSB0'=>'ttyUSB0_label', 'ttyIAX' => 'ttyIAX_label');
     
     /**
      * @var Array list of valid device labels
      */
     private $deviceLabels = array('ttyS0','ttyS1','ttyS2','ttyACM0','ttyUSB0');
 
-
-    /**
-    * Load all modems of type iax from modems db
-    */
-    private function loadIaxModems() 
-    {
-        $modems = $this->getPlatform()->getDatabase('modems')->getAll('iax');
-        foreach ($modems as $key => $modem) {
-            if (!isset($modem['extension']) || !$modem['extension']) {
-                continue;
-            }
-            $this->devices["ttyIAX".$modem['extension']] = $key." (IAX{$modem['extension']})";
-        }
-    }
 
     protected function initializeAttributes(\Nethgui\Module\ModuleAttributesInterface $base)
     {
@@ -76,7 +62,6 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('FaxNumber', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxNumber'));
         $this->declareParameter('FaxName', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxName'));
 
-        $this->loadIaxModems();
         $fdValidator = $this->createValidator()->memberOf(array_keys($this->devices));
         $this->declareParameter('FaxDeviceType', $this->createValidator()->memberOf(array('custom','known')), array());
         $this->declareParameter('FaxDeviceCustom', Validate::ANYTHING, array());

@@ -50,3 +50,4 @@ $L['ttyS0_label'] = 'COM1 (ttyS0)';
 $L['ttyS1_label'] = 'COM2 (ttyS1)';
 $L['ttyS2_label'] = 'COM3 (ttyS2)';
 $L['ttyUSB0_label'] = 'USB to serial (ttyUSB0)';
+$L['ttyIAX_label'] = 'IAX modems';

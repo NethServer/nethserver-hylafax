@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.0.9
+Version: 1.1.0
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root)
 
 %changelog
+* Thu Mar 05 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.0-1
+- IAXmodem: configure email address for each modem - Feature #2760 [NethServer]
+
 * Thu Oct 30 2014 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.10-1.ns6
 - Enable passive mode fax submission - Enhancement #2937 [NethServer]
 

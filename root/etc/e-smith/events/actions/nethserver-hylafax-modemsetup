@@ -40,7 +40,7 @@ $mabase = $db->get('hylafax')
 my $FaxDevice           = $mabase->prop('FaxDevice');
 
 # execute faxaddmodem only if not using iaxmodem
-if ($FaxDevice =~ /^ttyIAX/)) {
+if ($FaxDevice =~ /^ttyIAX/) {
     exit(0);
 }
 system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log");

@@ -1,0 +1,52 @@
+<?php 
+
+/* FaxServer translation, language: en */
+
+$L['AreaCode_label'] = 'Prefijo';
+$L['ClientShowReceived_label'] = 'Mostrar los fax recibidos de los clientes';
+$L['CountryCode_label'] = 'Código de país';
+$L['DispatchFileTypeList_label'] = 'Formato de fax entrante';
+$L['FaxDevice_label'] = 'Puerto Modem';
+$L['FaxDeviceType_known_label'] = 'Equipo básico';
+$L['FaxDeviceType_custom_label'] = 'Dispositivo personalizado';
+$L['FaxDeviceCustom_label'] = '';
+$L['FaxDeviceKnown_label'] = '';
+$L['FaxName_label'] = 'Remitente del fax (TSI)';
+$L['FaxNumber_label'] = 'Número de fax';
+$L['FaxServer_Description'] = 'Configurar el módem y el servidor de fax (Hylafax)';
+$L['FaxServer_Extras_Title'] = 'Funciones adicionales';
+$L['FaxServer_General_Title'] = 'General';
+$L['FaxServer_Modem_Title'] = 'Modem';
+$L['FaxServer_Notification_Title'] = 'Notificación de correo';
+$L['FaxServer_Tags'] = 'fax servidor fax hylafax modem impresión de numero sambafax';
+$L['FaxServer_Title'] = 'Servidor de fax';
+$L['Mode_label'] = 'Modo';
+$L['NotifyFileTypeList_label'] = 'Formato de fax saliente';
+$L['NotifyMaster_label'] = 'Notificar al administrador acerca de los faxes salientes y entrantes';
+$L['PBXPrefix_label'] = 'Prefijo PBX';
+$L['PrinterName_label'] = 'Nombre de impresora';
+$L['PrinteReceived_label'] = 'Imprimir automaticamente los fax recibidos';
+$L['SambaFax_label'] = 'SambaFax';
+$L['SendReport_label'] = 'Enviar informe diario';
+$L['SendTo_label'] = 'Fax entrantes a';
+$L['SendToType_faxmaster_label'] = 'Grupo local "faxmaster"';
+$L['SendToType_custom_label'] = 'Dirección de correo externo';
+$L['SendToCustom_label'] = 'E-mail';
+$L['SummaryReport_label'] = 'Agregar informe resumido para notificaión de fax saliente';
+$L['WaitDialTone_label'] = 'Esperar tono de marcación';
+$L['always_label'] = 'Siempre';
+$L['both_label'] = 'Enviar y recibir';
+$L['errors_label'] = 'Por los errores';
+$L['iax_label'] = 'Virtual (IAX)';
+$L['never_label'] = 'Nunca';
+$L['no_printer_label'] = 'No se configura la impresora';
+$L['pdf_label'] = 'PDF (Portable Data Format)';
+$L['ps_label'] = 'PS (PostScript)';
+$L['receive_label'] = 'Solo recibir';
+$L['send_label'] = 'Solo enviar';
+$L['tif_label'] = 'TIFF (Tagget Image File Format)';
+$L['ttyACM0_label'] = 'USB (ttyACM0)';
+$L['ttyS0_label'] = 'COM1 (ttyS0)';
+$L['ttyS1_label'] = 'COM2 (ttyS1)';
+$L['ttyS2_label'] = 'COM3 (ttyS2)';
+$L['ttyUSB0_label'] = 'USB a serie (ttyUSB0)';

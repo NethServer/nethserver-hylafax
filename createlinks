@@ -21,8 +21,7 @@ safe_symlink("/var/spool/hylafax/bin/pdf2fax.gs", "root/var/spool/hylafax/bin/pd
 templates2events("/var/spool/hylafax/etc/hosts.hfaxd",
 			qw(
 				interface-update
-				network-create
-				network-delete
+				trusted-networks-modify
 			));
 
 

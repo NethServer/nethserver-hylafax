@@ -15,16 +15,6 @@ safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-
 safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");
 safe_symlink("/var/spool/hylafax/bin/pdf2fax.gs", "root/var/spool/hylafax/bin/pdf2fax");
 
-
-# Expand hosts.hfaxd
-
-templates2events("/var/spool/hylafax/etc/hosts.hfaxd",
-			qw(
-				interface-update
-				trusted-networks-modify
-			));
-
-
 #--------------------------------------------------
 # actions for nethserver-hylafax-update event
 #--------------------------------------------------

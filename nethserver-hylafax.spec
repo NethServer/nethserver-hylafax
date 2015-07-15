@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.1.1
+Version: 1.1.2
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root)
 
 %changelog
+* Wed Jul 15 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.2-1
+- Event trusted-networks-modify - Enhancement #3195 [NethServer]
+
 * Fri Apr 10 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.1-1
 - Fax: cannot set up a physical modem - Bug #3113 [NethServer]
 

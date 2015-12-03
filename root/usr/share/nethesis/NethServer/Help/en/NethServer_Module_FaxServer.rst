@@ -104,3 +104,11 @@ SambaFax
 
 Send daily report
     Send a daily report to the administrator
+
+Mail to fax gateway
+    Enable the ``sendfax@...`` email address. The domain part of the
+    email recipient must correspond to one of the domains marked as
+    *Deliver locally* in the *Email* page.  Only SMTP clients from
+    green and trusted networks are allowed to send faxes with those
+    recipients.  The fax recipient number must be specified as the
+    ``Subject`` of the message.

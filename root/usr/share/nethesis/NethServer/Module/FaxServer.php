@@ -86,6 +86,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('SambaFax', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SambaFax'));
         $this->declareParameter('SendReport', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SendReport'));
         $this->declareParameter('SummaryReport', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'SummaryReport'));
+        $this->declareParameter('Mail2Fax', Validate::SERVICESTATUS, array('configuration', 'hylafax', 'Mail2Fax'));
     }
 
     public function readFaxDeviceKnown()

@@ -1,0 +1,6 @@
+#
+# 40sendfax -- sendfax accessible from LAN ({$hylafax{'Mail2Fax'}})
+#
+{$hylafax{'Mail2Fax'} eq 'enabled' ? '' : '#'}sendfax@                      reject
+
+

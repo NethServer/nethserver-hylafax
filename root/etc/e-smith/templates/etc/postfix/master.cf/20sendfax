@@ -1,0 +1,6 @@
+#
+# 20sendfax
+#
+sendfax      unix  -       n       n       -       1       pipe
+ flags= user=uucp argv=/var/spool/hylafax/bin/mail2fax.sh
+

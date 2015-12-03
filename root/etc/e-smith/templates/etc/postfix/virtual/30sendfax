@@ -1,0 +1,13 @@
+#
+# 30sendfax ({$hylafax{'Mail2Fax'}})
+#
+{
+    if($hylafax{'Mail2Fax'} ne 'enabled') {
+        return '# disabled';
+    }
+    foreach ($mailServer->getDeliveryDomains()) {
+        $OUT .= sprintf("%-38s sendfax\n", 'sendfax@' . $_);
+    }
+}
+
+

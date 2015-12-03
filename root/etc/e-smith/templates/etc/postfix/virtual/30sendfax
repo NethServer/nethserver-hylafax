@@ -6,7 +6,7 @@
         return '# disabled';
     }
     foreach ($mailServer->getDeliveryDomains()) {
-        $OUT .= sprintf("%-38s sendfax\n", 'sendfax@' . $_);
+        $OUT .= sprintf("%-38s sendfax@%s\n", 'sendfax@' . $_, $_);
     }
 }
 

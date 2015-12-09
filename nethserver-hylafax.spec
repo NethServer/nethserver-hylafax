@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.1.4
+Version: 1.1.5
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root)
 
 %changelog
+* Wed Dec 09 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.5-1
+- Mail to fax - Feature #1612 [NethServer]
+
 * Tue Sep 29 2015 Davide Principi <davide.principi@nethesis.it> - 1.1.4-1
 - Make Italian language pack optional - Enhancement #3265 [NethServer]
 

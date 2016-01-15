@@ -1,0 +1,15 @@
+{
+  #
+  # Convert old keys
+  #
+
+  use esmith::ConfigDB;
+  my $cdb = esmith::ConfigDB->open();
+
+  $cdb->get_prop_and_delete('hylafax','TCPPort');
+
+  $cdb->get_prop_and_delete('hylafax','access');
+  $cdb->set_type('hylafax','configuration');
+
+  '';   
+}

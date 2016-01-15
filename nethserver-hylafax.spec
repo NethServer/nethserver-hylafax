@@ -33,6 +33,7 @@ cd root;
 mkdir -p var/spool/hylafax/notify
 mkdir -p var/lib/nethserver/fax/docs/sent
 mkdir -p var/lib/nethserver/fax/docs/received
+mkdir -p var/lock/lockdev
 
 %install
 rm -rf %{buildroot}
@@ -42,6 +43,7 @@ rm -rf %{buildroot}
     --dir /var/lib/nethserver/fax/docs/ 'attr(0775,uucp,uucp)' \
     --dir /var/lib/nethserver/fax/docs/received 'attr(0775,uucp,uucp)' \
     --dir /var/lib/nethserver/fax/docs/sent 'attr(0775,uucp,uucp)' \
+    --dir /var/lock/lockdev 'attr(0775,uucp,uucp)' \
     --file /usr/sbin/neth-addmodem 'attr(0755,root,root)' \
     --file /usr/sbin/neth-faxsetup 'attr(0755,root,root)' \
     --file /var/spool/hylafax/bin/mail2fax.sh 'attr(0755,root,root)' \

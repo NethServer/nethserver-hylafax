@@ -47,28 +47,20 @@ system("/usr/sbin/neth-addmodem &> /var/log/addmodem.log");
 
 
 # stop all faxgetty-* services and remove relative files
-my @files = </etc/init/faxgetty-*.conf>;
+my @files = <"/usr/lib/systemd/system/hylafax-faxgetty\@*.service">;
 foreach my $file (@files) {
+   next if ($file eq '/usr/lib/systemd/system/hylafax-faxgetty@.service');
    my @tmp = split(/\./,basename($file));
-   system("/sbin/stop ".$tmp[0]);
+   system("/usr/bin/systemctl stop ".$tmp[0]);
    unlink($file);
-} 
+}
 
-# create upstart file
-my $upstart_file="/etc/init/faxgetty-$FaxDevice.conf";
-my $doc = <<END
-start on runlevel [2345]
 
-stop on runlevel [S016]
 
-respawn
-exec /usr/sbin/faxgetty $FaxDevice
-END
-;
+# create job file
+my $job_file="/usr/lib/systemd/system/hylafax-faxgetty@".$FaxDevice.".service";
+system("sed '/^After/d' /usr/lib/systemd/system/hylafax-faxgetty@.service > $job_file");
+system("/usr/bin/systemctl daemon-reload");
+# start new job file
+system("/usr/bin/systemctl start hylafax-faxgetty@".$FaxDevice);
 
-open (FILE, ">>$upstart_file"); 
-print FILE $doc; 
-close (FILE); 
-
-# start new upstart file
-system("/sbin/start faxgetty-$FaxDevice");

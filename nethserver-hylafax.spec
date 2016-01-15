@@ -10,7 +10,6 @@ BuildArch: noarch
 Requires: hylafax >= hylafax-5.5.0, urw-fonts, perl-Mail-Sendmail, enscript
 Requires: nethserver-mail-server, nethserver-directory
 BuildRequires: nethserver-devtools
-AutoReq: no
 
 %description
 NethServer module to configure Hylafax+
@@ -36,11 +35,10 @@ mkdir -p var/lib/nethserver/fax/docs/sent
 mkdir -p var/lib/nethserver/fax/docs/received
 
 %install
-/bin/rm -rf $RPM_BUILD_ROOT
-(cd root   ; /usr/bin/find . -depth -print | /bin/cpio -dump $RPM_BUILD_ROOT)
-/bin/rm -f %{name}-%{version}-filelist
+rm -rf %{buildroot}
+(cd root; find . -depth -print | cpio -dump %{buildroot})
 
-/sbin/e-smith/genfilelist \
+%{genfilelist} \
     --dir /var/lib/nethserver/fax/docs/ 'attr(0775,uucp,uucp)' \
     --dir /var/lib/nethserver/fax/docs/received 'attr(0775,uucp,uucp)' \
     --dir /var/lib/nethserver/fax/docs/sent 'attr(0775,uucp,uucp)' \
@@ -55,14 +53,13 @@ mkdir -p var/lib/nethserver/fax/docs/received
     --ignoredir /var/spool/hylafax/etc \
     --ignoredir /var/spool/hylafax \
     --file /var/spool/hylafax/etc/setup.cache 'attr(0644,uucp,uucp)' \
-    $RPM_BUILD_ROOT > %{name}-%{version}-%{release}-filelist
-echo "%doc COPYING"          >> %{name}-%{version}-filelist
+    %{buildroot} > %{name}-%{version}-%{release}-filelist
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}-%{version}-%{release}-filelist
 %defattr(0644,root,root)
+%dir %{_nseventsdir}/%{name}-update
+%doc COPYING
 
 %changelog
 * Wed Dec 09 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.5-1

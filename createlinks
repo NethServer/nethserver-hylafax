@@ -45,7 +45,8 @@ event_actions($event, qw(
 ));
 
 event_services($event, qw(
-   hylafax restart
+   hylafax-faxq restart
+   hylafax-hfaxd restart
    postfix reload
 ));
 
@@ -78,7 +79,8 @@ event_actions($event,
              'nethserver-hylafax-sambafax' => 20);
 
 event_services($event, qw(
-   hylafax restart
+   hylafax-faxq restart
+   hylafax-hfaxd restart
    postfix reload
 ));
 

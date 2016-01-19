@@ -8,7 +8,7 @@ if ($sendTo eq 'disabled') {
 } elsif ($sendTo eq 'faxmaster') {
   my $mailServer = NethServer::MailServer->new();
   my @addressList = $mailServer->getAccountMailAddresses('faxmaster');
-  $sendTo = $addressList[0];
+  $sendTo = $addressList[0] || '';
 } else {
   # use custom email address
 }

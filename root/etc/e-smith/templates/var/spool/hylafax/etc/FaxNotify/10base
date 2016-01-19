@@ -2,7 +2,7 @@
 
 my $fileType = $hylafax{'NotifyFileType'} || 'pdf';
 $fileType =~ s/,/\ /g;
-my $lang = $hylafax{'Lang'} || 'it_IT';
+my $lang = $hylafax{'Lang'} || '';
 my $notifyMaster = $hylafax{'NotifyMaster'} || 'never';
 
 

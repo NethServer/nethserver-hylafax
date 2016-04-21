@@ -8,7 +8,7 @@ Source: %{name}-%{version}.tar.gz
 Packager: Giacomo Sanchietti <giacomo.sanchietti@nethesis.it>
 BuildArch: noarch
 Requires: hylafax >= hylafax-5.5.0, urw-fonts, perl-Mail-Sendmail, enscript
-Requires: nethserver-mail-server, nethserver-directory
+Requires: nethserver-mail-server
 BuildRequires: nethserver-devtools
 
 %description

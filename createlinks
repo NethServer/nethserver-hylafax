@@ -38,6 +38,7 @@ event_templates($event, qw(
     /etc/postfix/master.cf
     /etc/postfix/transport
     /etc/postfix/virtual
+    /etc/pam.d/hylafax
 ));
 
 event_actions($event, qw(
@@ -71,6 +72,7 @@ event_templates($event, qw(
     /etc/postfix/master.cf
     /etc/postfix/transport
     /etc/postfix/virtual
+    /etc/pam.d/hylafax
 ));
 
 event_actions($event,
@@ -83,6 +85,16 @@ event_services($event, qw(
    hylafax-hfaxd restart
    postfix reload
 ));
+
+#--------------------------------------------------
+# actions for hostname-modify event
+#--------------------------------------------------
+
+$event = "hostname-modify";
+event_templates($event, qw(
+    /etc/pam.d/hylafax
+));
+
 
 #--------------------------------------------------
 # actions for migration-import event

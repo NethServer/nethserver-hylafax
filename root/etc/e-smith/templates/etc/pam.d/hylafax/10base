@@ -1,6 +1,6 @@
 #%PAM-1.0
 auth       required     pam_nologin.so
-auth       required     pam_succeed_if.so user ingroup faxmaster
+auth       required     pam_succeed_if.so user ingroup faxmaster@{$DomainName}
 auth       include      password-auth
 account    include      password-auth
 session    include      password-auth

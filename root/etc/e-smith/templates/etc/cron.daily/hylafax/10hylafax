@@ -1,7 +1,8 @@
 {
   my $sendreport=$hylafax{SendReport} || "disabled";
+  my $sendTo = $hylafax{SendTo} || 'root';
   if($sendreport eq "enabled")   {
-    $OUT.="/usr/sbin/faxcron | mail -s 'HylaFAX Usage Report' faxmaster";
+    $OUT.="/usr/sbin/faxcron | mail -s 'HylaFAX Usage Report' $sendTo";
   } else {
     $OUT.="#Hylafax Usage Report DISABLED";
   }

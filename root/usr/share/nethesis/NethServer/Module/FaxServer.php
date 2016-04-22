@@ -62,6 +62,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $this->declareParameter('FaxNumber', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxNumber'));
         $this->declareParameter('FaxName', Validate::ANYTHING, array('configuration', 'hylafax', 'FaxName'));
 
+        $stValidator = $this->createValidator()->orValidator($this->createValidator(Validate::EMAIL), $this->createValidator(Validate::EMPTYSTRING));
         $fdValidator = $this->createValidator()->memberOf(array_keys($this->devices));
         $this->declareParameter('FaxDeviceType', $this->createValidator()->memberOf(array('custom','known')), array());
         $this->declareParameter('FaxDeviceCustom', Validate::ANYTHING, array());
@@ -74,9 +75,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $nmValidator = $this->createValidator()->memberOf(array('always','never','errors'));
         $this->declareParameter('NotifyMaster', $nmValidator, array('configuration', 'hylafax', 'NotifyMaster'));
 
-        $this->declareParameter('SendToType', $this->createValidator()->memberOf(array('faxmaster','custom')), array());
-        $this->declareParameter('SendToCustom', Validate::EMAIL, array());
-        $this->declareParameter('SendTo', FALSE, array('configuration', 'hylafax', 'SendTo')); # not accessibile from UI, position is IMPORTANT
+        $this->declareParameter('SendTo', $stValidator, array('configuration', 'hylafax', 'SendTo'));
         $this->declareParameter('DispatchFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'DispatchFileType', ','));
         $this->declareParameter('NotifyFileTypeList', Validate::ANYTHING_COLLECTION, array('configuration', 'hylafax', 'NotifyFileType', ','));
 
@@ -139,44 +138,6 @@ class FaxServer extends \Nethgui\Controller\AbstractController
     }
 
 
-    public function readSendToType()
-    {
-        $current = $this->getPlatform()->getDatabase('configuration')->getProp('hylafax','SendTo');
-        if($current == "faxmaster") {
-            return "faxmaster";
-        } else {
-            return "custom";
-        }
-    }
-
-    public function writeSendToType($value)
-    {
-        if ($this->parameters["SendToType"] === 'faxmaster') {
-             $this->parameters["SendTo"] = 'faxmaster';
-             return 'faxmaster';
-        } else {
-             return "";
-        }
-    }
-
-    public function readSendToCustom()
-    {
-        if ($this->parameters["SendToType"] === 'custom') {
-             return $this->parameters["SendTo"];
-        } else {
-             return "";
-        }
-    }
-    
-    public function writeSendToCustom($value)
-    {
-        if ($this->parameters["SendToType"] === 'custom') {
-             $this->parameters["SendTo"] = $value;
-        }
-        return true;
-    }
-
-
     protected function onParametersSaved($changes)
     {
         $this->getPlatform()->signalEvent('nethserver-hylafax-save@post-process');
@@ -203,6 +164,8 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $view['NotifyMasterDatasource'] = array_map(function($fmt) use ($view) {
             return array($fmt, $view->translate($fmt . '_label'));
         }, array('always', 'never', 'errors'));
+        $db = $this->getPlatform()->getDatabase('configuration');
+        $view['DefaultSendTo'] = "root@".$db->getType('SystemName').".".$db->getType('DomainName');
         
         $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
 

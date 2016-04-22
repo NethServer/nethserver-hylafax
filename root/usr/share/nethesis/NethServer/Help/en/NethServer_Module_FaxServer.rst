@@ -61,14 +61,9 @@ Received faxes format
     notification of reception, deselect all formats.
 
 Forward received faxes to
-
-    * Group "faxmaster"
-        By default, the received faxes are sent to *faxmaster*: if
-        a user needs to receive incoming faxes should be added to this
-        group.
-    * External email
-        Input an external email address in case you
-        want to send received faxes to an email address not on this server.
+    By default, received faxes are sent to *root*.
+    Create an IMAP shared folder if you wish to send incoming faxes
+    to multiple users.
 
 Sent faxes format
     If requested by the client, the server sends an email notification with an

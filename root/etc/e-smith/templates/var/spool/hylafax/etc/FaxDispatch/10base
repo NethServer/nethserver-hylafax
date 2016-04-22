@@ -1,17 +1,6 @@
 {
 
-use NethServer::MailServer;
-
-my $sendTo = $hylafax{'SendTo'} || 'faxmaster';
-if ($sendTo eq 'disabled') {
-  $sendTo = '';
-} elsif ($sendTo eq 'faxmaster') {
-  my $mailServer = NethServer::MailServer->new();
-  my @addressList = $mailServer->getAccountMailAddresses('faxmaster');
-  $sendTo = $addressList[0] || '';
-} else {
-  # use custom email address
-}
+my $sendTo = $hylafax{'SendTo'} || 'root';
 my $fileType = $hylafax{'DispatchFileType'} || '';
 $fileType =~ s/,/\ /g;
 my $notifyMaster = $hylafax{'NotifyMaster'} || 'never';

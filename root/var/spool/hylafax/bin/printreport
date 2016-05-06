@@ -16,7 +16,7 @@ fi
 case $fileType in
 
 "PostScript"|"PDF")
-	gs -q -sDEVICE=tiffg3 -dNOPAUSE -dSAFER=true -sPAPERSIZE=a4 -dFIXEDMEDIA -dBATCH -r209.10\x98 "-sOutputFile=$inFile" $file
+	gs -q -sDEVICE=tiffg3 -dNOPAUSE -dSAFER=true -sPAPERSIZE=a4 -dFIXEDMEDIA -dBATCH -r209.10\x196 "-sOutputFile=$inFile" $file
 	;;
 
 "TIFF")

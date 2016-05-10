@@ -2,6 +2,7 @@
 # 30sendfax ({$hylafax{'Mail2Fax'}})
 #
 {
+    use NethServer::MailServer;
     if($hylafax{'Mail2Fax'} ne 'enabled') {
         return '# disabled';
     }

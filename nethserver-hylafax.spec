@@ -62,6 +62,7 @@ rm -rf %{buildroot}
 %defattr(0644,root,root)
 %dir %{_nseventsdir}/%{name}-update
 %doc COPYING
+%doc README.rst
 
 %changelog
 * Wed Dec 09 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.5-1

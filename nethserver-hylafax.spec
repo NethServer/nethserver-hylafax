@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.1.5
+Version: 1.1.6
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -65,6 +65,10 @@ rm -rf %{buildroot}
 %doc README.rst
 
 %changelog
+* Fri May 20 2016 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.6-1
+- mail2fax transport expansion error - Bug #3391 [NethServer]
+- Improve fax report quality - Enhancement #3378 [NethServer]
+
 * Wed Dec 09 2015 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.1.5-1
 - Mail to fax - Feature #1612 [NethServer]
 

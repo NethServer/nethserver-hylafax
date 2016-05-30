@@ -9,7 +9,7 @@ foreach (qw(FaxNotify FaxDispatch))
     safe_symlink("/etc/e-smith/templates-default/template-begin-shell",
         "root/etc/e-smith/templates/var/spool/hylafax/etc/$_/template-begin");
 }
-safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-smith/templates/etc/cron.daily/hylafax/template-begin");
+safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-smith/templates/etc/cron.daily/hylafax+/template-begin");
 
 
 safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");
@@ -31,7 +31,7 @@ templates2events("/var/spool/hylafax/etc/FaxDispatch",$event);
 templates2events("/var/spool/hylafax/etc/FaxNotify",$event);
 templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
 templates2events("/etc/hylafax/hyla.conf",$event);
-templates2events("/etc/cron.daily/hylafax",$event);
+templates2events("/etc/cron.daily/hylafax+",$event);
 
 event_templates($event, qw(
     /etc/postfix/internal_access
@@ -65,7 +65,7 @@ templates2events("/var/spool/hylafax/etc/FaxNotify",$event);
 templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
 templates2events("/etc/hylafax/hyla.conf",$event);
 templates2events("/var/spool/hylafax/etc/dispatch/print.conf",$event);
-templates2events("/etc/cron.daily/hylafax",$event);
+templates2events("/etc/cron.daily/hylafax+",$event);
 
 event_templates($event, qw(
     /etc/postfix/internal_access

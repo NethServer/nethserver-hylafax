@@ -2,11 +2,18 @@
 # 30sendfax ({$hylafax{'Mail2Fax'}})
 #
 {
+    use esmith::DomainsDB;
+    my $db = esmith::DomainsDB->open_ro();
+
     if($hylafax{'Mail2Fax'} ne 'enabled') {
         return '# disabled';
     }
-    foreach ($mailServer->getDeliveryDomains()) {
-        $OUT .= sprintf("%-38s sendfax@%s\n", 'sendfax@' . $_, $_);
+
+    foreach ($db->get_all_by_prop('type' => 'domain')) {
+        my $transport = $_->prop('TransportType') || '';
+        if ($transport eq 'LocalDelivery') {
+            $OUT .= sprintf("%-38s sendfax@%s\n", 'sendfax@' . $_->key, $_->key);
+        }
     }
 }
 

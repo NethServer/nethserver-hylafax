@@ -2,13 +2,18 @@
 # 30sendfax ({$hylafax{'Mail2Fax'}})
 #
 {
-    use NethServer::MailServer;
+    use esmith::DomainsDB;
+    my $db = esmith::DomainsDB->open_ro();
+
     if($hylafax{'Mail2Fax'} ne 'enabled') {
         return '# disabled';
     }
-    my $mailServer = NethServer::MailServer->new();
-    foreach ($mailServer->getDeliveryDomains()) {
-        $OUT .= sprintf("%-38s sendfax:\n", 'sendfax@' . $_);
+
+    foreach ($db->get_all_by_prop('type' => 'domain')) {
+        my $transport = $_->prop('TransportType') || '';
+        if ($transport eq 'LocalDelivery') {
+            $OUT .= sprintf("%-38s sendfax:\n", 'sendfax@' . $_->key);
+        }
     }
 }
 

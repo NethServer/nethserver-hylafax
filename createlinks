@@ -23,6 +23,7 @@ my $event = "nethserver-hylafax-update";
 
 event_actions($event, qw(
      initialize-default-databases 00
+     nethserver-mail-postmap-update 20
 ));
 
 templates2events("/var/spool/hylafax/etc/config",$event);
@@ -39,10 +40,6 @@ event_templates($event, qw(
     /etc/postfix/transport
     /etc/postfix/virtual
     /etc/pam.d/hylafax
-));
-
-event_actions($event, qw(
-    nethserver-mail-postmap-update 20
 ));
 
 event_services($event, qw(

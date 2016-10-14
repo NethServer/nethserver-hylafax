@@ -1,0 +1,18 @@
+#
+# 80hylafax
+#
+{
+    my $status = ${'hylafax-hfaxd'}{'status'} || 'disabled';
+    my $access = ${'hylafax-hfaxd'}{'access'} || 'green';
+
+    if ($status eq 'enabled') {
+        foreach ( split(',',$access) ) {
+            $_ =~ s/^green$/loc/;
+            $_ =~ s/^red$/net/;
+            $_ = substr($_, 0, 5);
+            $OUT.="?COMMENT hylafax-hfaxd helper\n";
+            $OUT.="FTP(HELPER)\t$_\t-\ttcp\t4559\n";
+            $OUT.="?COMMENT\n";
+        }
+    }
+}

@@ -9,7 +9,7 @@
   $cdb->get_prop_and_delete('hylafax','TCPPort');
 
   $cdb->get_prop_and_delete('hylafax','access');
-  $cdb->set_type('hylafax','configuration');
+  $cdb->set_prop('hylafax','type','configuration');
 
   '';   
 }

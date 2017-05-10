@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.2.2
+Version: 1.2.3
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -65,6 +65,9 @@ rm -rf %{buildroot}
 %doc README.rst
 
 %changelog
+* Wed May 10 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.3-1
+- Upgrade from NS 6 via backup and restore - NethServer/dev#5234
+
 * Mon Mar 06 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.2-1
 - Migration from sme8 - NethServer/dev#5196
 

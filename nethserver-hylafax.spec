@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.2.3
+Version: 1.2.4
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -65,6 +65,10 @@ rm -rf %{buildroot}
 %doc README.rst
 
 %changelog
+* Mon May 29 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.4-1
+- Fax printing fail - Bug NethServer/dev#5277
+- Avoid bounces to FaxMaster@<FQDN>
+
 * Wed May 10 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.3-1
 - Upgrade from NS 6 via backup and restore - NethServer/dev#5234
 

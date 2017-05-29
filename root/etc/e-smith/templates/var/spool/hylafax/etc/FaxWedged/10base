@@ -1,0 +1,6 @@
+{
+
+my $sendTo = $hylafax{'SendTo'} || 'root';
+$OUT.="TOADDR=$sendTo\n";
+
+}

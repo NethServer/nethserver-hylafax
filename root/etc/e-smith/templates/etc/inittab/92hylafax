@@ -1,6 +1,0 @@
-{
-    if (-e "/var/spool/hylafax/etc/config.$hylafax{FaxDevice}" && $hylafax{FaxDevice} ne 'none') { 
-      $OUT = "# faxgetty $hylafax{FaxDevice}\n";
-      $OUT .= "fax:23457:respawn:/usr/sbin/faxgetty ".$hylafax{FaxDevice};
-    }
-}

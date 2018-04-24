@@ -137,10 +137,17 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         return true;
     }
 
+    private function isMailServerInstalled()
+    {
+        return file_exists("/etc/e-smith/db/configuration/defaults/dovecot/type");
+    }
 
     protected function onParametersSaved($changes)
     {
-        $this->getPlatform()->signalEvent('nethserver-hylafax-save@post-process');
+        if (isset($this->parameters['Mail2Fax']) && $this->isMailServerInstalled()) {
+            $this->getPlatform()->signalEvent('nethserver-mail-server-save');
+        }
+        $this->getPlatform()->signalEvent('nethserver-hylafax-save &');
     }
 
     public function prepareView(\Nethgui\View\ViewInterface $view)
@@ -168,7 +175,7 @@ class FaxServer extends \Nethgui\Controller\AbstractController
         $view['DefaultSendTo'] = "root@".$db->getType('SystemName').".".$db->getType('DomainName');
         
         $view['PrinterNameDatasource'] = $this->readPrinterNameDatasource($view);
-
+        $view['DisplayMail2Fax'] = $this->isMailServerInstalled();
     }
 
     private function readPrinterNameDatasource(\Nethgui\View\ViewInterface $view)

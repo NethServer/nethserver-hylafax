@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.2.4
+Version: 1.3.4
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -64,6 +64,9 @@ rm -rf %{buildroot}
 %doc README.rst
 
 %changelog
+* Thu Apr 26 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.4-1
+- Fax server: remove mail server dependency - NethServer/dev#5468
+
 * Mon May 29 2017 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.2.4-1
 - Fax printing fail - Bug NethServer/dev#5277
 - Avoid bounces to FaxMaster@<FQDN>

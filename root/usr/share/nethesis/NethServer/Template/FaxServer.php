@@ -39,9 +39,11 @@ $extra = $view->panel()
     ->setAttribute('uncheckedValue', 'disabled')
     ->insert($view->selector('PrinterName', $view::SELECTOR_DROPDOWN)))
     ->insert($view->checkbox('SambaFax','enabled')->setAttribute('uncheckedValue', 'disabled'))
-    ->insert($view->checkbox('SendReport','enabled')->setAttribute('uncheckedValue', 'disabled'))
-    ->insert($view->checkbox('Mail2Fax','enabled')->setAttribute('uncheckedValue', 'disabled'))
-;
+    ->insert($view->checkbox('SendReport','enabled')->setAttribute('uncheckedValue', 'disabled'));
+
+if ($view['DisplayMail2Fax']) {
+   $extra->insert($view->checkbox('Mail2Fax','enabled')->setAttribute('uncheckedValue', 'disabled'));
+}
 
 $tabs = $view->tabs()
     ->insert($general)

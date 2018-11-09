@@ -9,8 +9,6 @@ foreach (qw(FaxNotify FaxDispatch))
     safe_symlink("/etc/e-smith/templates-default/template-begin-shell",
         "root/etc/e-smith/templates/var/spool/hylafax/etc/$_/template-begin");
 }
-safe_symlink("/etc/e-smith/templates-default/template-begin-shell", "root/etc/e-smith/templates/etc/cron.daily/hylafax+/template-begin");
-
 
 safe_symlink("/var/spool/hylafax/bin/ps2fax.gs", "root/var/spool/hylafax/bin/ps2fax");
 safe_symlink("/var/spool/hylafax/bin/pdf2fax.gs", "root/var/spool/hylafax/bin/pdf2fax");
@@ -23,7 +21,8 @@ my $event = "nethserver-hylafax-update";
 
 event_actions($event, qw(
      initialize-default-databases 00
-     nethserver-mail-postmap-update 20
+     nethserver-hylafax-conf 20
+     nethserver-mail-postmap-update 30
 ));
 
 templates2events("/var/spool/hylafax/etc/config",$event);
@@ -33,7 +32,7 @@ templates2events("/var/spool/hylafax/etc/FaxNotify",$event);
 templates2events("/var/spool/hylafax/etc/FaxWedged",$event);
 templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
 templates2events("/etc/hylafax/hyla.conf",$event);
-templates2events("/etc/cron.daily/hylafax+",$event);
+templates2events("/etc/sysconfig/hylafax+",$event);
 
 event_templates($event, qw(
     /etc/pam.d/hylafax
@@ -59,7 +58,7 @@ templates2events("/var/spool/hylafax/etc/FaxWedged",$event);
 templates2events("/var/spool/hylafax/etc/config.nethesis",$event);
 templates2events("/etc/hylafax/hyla.conf",$event);
 templates2events("/var/spool/hylafax/etc/dispatch/print.conf",$event);
-templates2events("/etc/cron.daily/hylafax+",$event);
+templates2events("/etc/sysconfig/hylafax+",$event);
 
 event_templates($event, qw(
     /etc/pam.d/hylafax

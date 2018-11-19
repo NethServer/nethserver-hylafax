@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.3.4
+Version: 1.3.5
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -64,6 +64,9 @@ rm -rf %{buildroot}
 %doc README.rst
 
 %changelog
+* Mon Nov 19 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.5-1
+- Fax server: report is sent even if disabled - Bug NethServer/dev#5636
+
 * Thu Apr 26 2018 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.4-1
 - Fax server: remove mail server dependency - NethServer/dev#5468
 

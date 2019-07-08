@@ -1,0 +1,26 @@
+{
+  "id": "nethserver-hylafax",
+  "name": "HylaFAX",
+  "summary": "Provides HylaFAX for NethServer",
+  "description": "Provides HylaFAX for NethServer",
+  "url": "",
+  "homepage": "https://github.com/NethServer/nethserver-hylafax",
+  "provides": ["nethserver-hylafax"],
+  "release": {
+    "version": "1.0.0"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/NethServer/dev/issues"
+  },
+  "author": {
+    "name": "Edoardo Spadoni",
+    "url": "https://github.com/NethServer/nethserver-hylafax",
+    "email": "edoardo.spadoni@nethesis.it"
+  },
+  "infoapi": {
+    "path": "nethserver-hylafax/read"
+  },
+  "icon": "logo.png",
+  "external": true
+}

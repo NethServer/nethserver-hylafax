@@ -67,5 +67,5 @@ my $job_file="/usr/lib/systemd/system/hylafax-faxgetty@".$FaxDevice.".service";
 system("sed '/^After/d' /usr/lib/systemd/system/hylafax-faxgetty@.service > $job_file");
 system("/usr/bin/systemctl daemon-reload");
 # start new job file
-system("/usr/bin/systemctl start hylafax-faxgetty@".$FaxDevice);
+system("/usr/bin/systemctl enable --now hylafax-faxgetty@".$FaxDevice);
 

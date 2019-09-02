@@ -28,6 +28,7 @@ NethServer module to configure Hylafax+
 %build
 %{makedocs}
 perl createlinks
+sed -i 's/_RELEASE_/%{version}/' %{name}.json
 cd root;
 mkdir -p var/spool/hylafax/notify
 mkdir -p var/lib/nethserver/fax/docs/sent
@@ -145,7 +146,7 @@ install -v -m 755 -D api/read %{buildroot}/usr/libexec/nethserver/api/%{name}/re
 
 * Thu Oct 17 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.3-1.ns6
 - Fix clients connection to hfaxd #2209
-- Db defaults: remove Runlevels property #2067 
+- Db defaults: remove Runlevels property #2067
 
 * Tue Apr 30 2013 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.0.2-1.ns6
 - Rebuild for automatic package handling. #1870

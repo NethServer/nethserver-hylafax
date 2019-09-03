@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.3.7
+Version: 1.3.8
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -68,6 +68,9 @@ install -v -m 755 -D api/read %{buildroot}/usr/libexec/nethserver/api/%{name}/re
 %doc README.rst
 
 %changelog
+* Tue Sep 03 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.8-1
+- Cockpit. List correct application version - Nethserver/dev#5819
+
 * Tue Jul 23 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.3.7-1
 - Physical Modem: faxgetty not started after reboot - Bug NethServer/dev#5793
 

@@ -58,6 +58,7 @@ install -v -m 755 -D api/read %{buildroot}/usr/libexec/nethserver/api/%{name}/re
     --ignoredir /var/spool/hylafax/etc \
     --ignoredir /var/spool/hylafax \
     --file /var/spool/hylafax/etc/setup.cache 'attr(0644,uucp,uucp)' \
+    --file /etc/sudoers.d/50_nsapi_nethserver_hylafax 'attr(0440,root,root)' \
     %{buildroot} > %{name}-%{version}-%{release}-filelist
 
 

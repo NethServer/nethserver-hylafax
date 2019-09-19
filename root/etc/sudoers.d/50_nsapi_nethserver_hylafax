@@ -1,0 +1,7 @@
+#
+# nsapi_nethserver_hylafax
+#
+Cmnd_Alias NSAPI_NETHSERVER_HYLAFAX = \
+    /usr/libexec/nethserver/api/nethserver-hylafax/read
+
+Defaults!NSAPI_NETHSERVER_HYLAFAX !requiretty

@@ -1,6 +1,6 @@
 Summary: NethServer module to configure Hylafax+
 Name: nethserver-hylafax
-Version: 1.4.0
+Version: 1.4.1
 Release: 1%{?dist}
 License: GPL
 Group: Networking/Daemons
@@ -69,6 +69,9 @@ install -v -m 755 -D api/read %{buildroot}/usr/libexec/nethserver/api/%{name}/re
 %doc README.rst
 
 %changelog
+* Thu May 14 2020 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.1-1
+- sendfax font error - Bug NethServer/dev#6160
+
 * Tue Oct 01 2019 Giacomo Sanchietti <giacomo.sanchietti@nethesis.it> - 1.4.0-1
 - Sudoers based authorizations for Cockpit UI - NethServer/dev#5805
 
